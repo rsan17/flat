@@ -15,10 +15,12 @@ type OrderEmailData = {
   clubMemberName?: string | null;
 };
 
-export async function sendCustomerConfirmation(_data: OrderEmailData) {
+export async function sendCustomerConfirmation(data: OrderEmailData) {
+  void data;
   return { skipped: true };
 }
 
-export async function sendAdminNotification(_data: OrderEmailData) {
+export async function sendAdminNotification(data: OrderEmailData) {
+  void data;
   return { skipped: true };
 }
