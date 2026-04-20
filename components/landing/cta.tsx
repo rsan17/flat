@@ -40,7 +40,7 @@ export function CTA() {
           <div className="font-display text-4xl md:text-6xl">
             ГОТОВІ РОБИТИ ХІД?
           </div>
-          <Link href="/checkout?product=board-001&variant=pro" className="btn btn-lilac">
+          <Link href="/checkout?product=board-001&variant=standard" className="btn btn-lilac">
             замовити · дроп 001
           </Link>
         </div>

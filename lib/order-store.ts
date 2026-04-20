@@ -15,6 +15,8 @@ export type OrderRecord = {
   np_warehouse_ref: string;
   np_delivery_type: "warehouse" | "postomat" | "pickup";
   club_member_name: string | null;
+  engraving: boolean;
+  engraving_fee: number; // kopecks
   product_sku: string;
   product_variant: string;
   quantity: number;

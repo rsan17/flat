@@ -28,9 +28,12 @@ export function Nav() {
           <a href="#faq" className="caps text-xs hover:underline">
             faq
           </a>
+          <a href="#club" className="caps text-xs hover:underline">
+            клуб
+          </a>
         </nav>
         <Link
-          href="/checkout?product=board-001&variant=pro"
+          href="/checkout?product=board-001&variant=standard"
           className="btn btn-lilac text-xs"
         >
           купити

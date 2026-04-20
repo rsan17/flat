@@ -4,7 +4,12 @@ import { CheckoutForm } from "@/components/checkout/checkout-form";
 import { Marquee } from "@/components/landing/marquee";
 import { findVariant, BOARD_001 } from "@/lib/products";
 
-type SearchParams = Promise<{ product?: string; variant?: string }>;
+type SearchParams = Promise<{
+  product?: string;
+  variant?: string;
+  engraving?: string;
+  nickname?: string;
+}>;
 
 export default async function CheckoutPage({
   searchParams,
@@ -18,6 +23,8 @@ export default async function CheckoutPage({
     product: BOARD_001,
     variant: BOARD_001.variants[0],
   };
+  const initialEngraving = sp.engraving === "1" || sp.engraving === "true";
+  const initialNickname = (sp.nickname ?? "").slice(0, 80);
 
   return (
     <>
@@ -44,7 +51,12 @@ export default async function CheckoutPage({
             {hit.product.title} — {hit.variant.name}
           </p>
         </div>
-        <CheckoutForm product={hit.product} variant={hit.variant} />
+        <CheckoutForm
+          product={hit.product}
+          variant={hit.variant}
+          initialEngraving={initialEngraving}
+          initialClubMemberName={initialNickname}
+        />
       </main>
     </>
   );

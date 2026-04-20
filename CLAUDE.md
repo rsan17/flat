@@ -43,6 +43,8 @@
 
 ### 4. Email templates
 Винести HTML з `lib/email.ts` у React Email компоненти.
+Показати у customer + admin email інфо про гравіювання (`engraving`,
+`club_member_name`, `engraving_fee`) якщо активовано.
 
 ### 5. Inventory
 12/12 зараз хардкод. Після підключення Supabase — тягнути лишок з БД і
@@ -51,6 +53,21 @@
 ### 6. Club member discount
 Якщо у чекауті заповнено `clubMemberName`, позначати `is_club_member=true`
 в записі замовлення. Пізніше — знижка за промокодом/перевіркою.
+
+### 7. F5 Chess Club · одноразові Telegram-інвайти
+Зараз `/api/club/join` віддає статичний інвайт із `F5_TG_INVITE_URL` (env)
+або fallback-плейсхолдер. Апгрейд: викликати Telegram Bot API
+`createChatInviteLink` з `member_limit: 1` і `expire_date ≈ 24h`.
+Потрібні `F5_TG_BOT_TOKEN` + `F5_TG_CHAT_ID`, бот має бути адміном групи.
+
+### 8. F5 Chess Club · Supabase
+Замінити in-memory `lib/club-store.ts` на таблицю `club_members`
+(`id uuid, full_name, phone unique, nickname, chess_handle, birthday date,
+created_at`). Додати поле "день народження" у форму як опціональне.
+
+### 9. F5 Chess Club · cashback
+Після реєстрації — нараховувати 5% замість 2% для замовлень з тим же
+phone. Звʼязок club_members ↔ orders по телефону.
 
 ## Поточний стан
 

@@ -12,9 +12,13 @@ export function About() {
         </div>
         <div className="space-y-6 text-lg md:col-span-7 md:col-start-6">
           <p>
-            Ми робимо шахи для тих, кому набридли штампи з магазину. Кожна дошка
-            збирається вручну у Львові. Масив, маслом, лазером — без лаку, без
-            пластику, без компромісів.
+            Ми зробили шахи, які самі любимо брати в руки.
+            <br />
+            Надруковані на 3D-принтері, але з увагою до деталей і відчуття.
+            <br />
+            Вони трохи важчі, ніж очікуєш — і це кайф.
+            <br />
+            Магніти фіксують кожен хід для твоєї комфортної гри.
           </p>
           <p>
             THE BOARD — це шаховий об’єкт, який однаково вписується у вітальню,
@@ -24,15 +28,14 @@ export function About() {
           <ul className="mt-6 grid gap-3 text-base">
             <li className="border-l-4 border-lilac pl-4">
               <span className="caps text-[11px] opacity-70">матеріал</span>
-              <div>Дуб · горіх · бук. Олія з воском.</div>
-            </li>
-            <li className="border-l-4 border-lilac pl-4">
-              <span className="caps text-[11px] opacity-70">номер</span>
-              <div>Кожна дошка має власний номер із 12.</div>
+              <div>Сучасний 3D-друк із приємною текстурою.</div>
             </li>
             <li className="border-l-4 border-lilac pl-4">
               <span className="caps text-[11px] opacity-70">фігури</span>
-              <div>Повний набір у лляному мішечку.</div>
+              <div>
+                З додатковою вагою та магнітною основою, які тримають кожен хід.
+                Кожна фігура має своє місце — усе продумано до дрібниць.
+              </div>
             </li>
           </ul>
         </div>

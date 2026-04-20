@@ -1,18 +1,20 @@
 "use client";
 
 import { formatUAH } from "@/lib/utils";
-import type { Product, ProductVariant } from "@/lib/products";
+import { ENGRAVING_FEE_KOPECKS, type Product, type ProductVariant } from "@/lib/products";
 
 type Props = {
   product: Product;
   variant: ProductVariant;
   quantity: number;
+  engraving?: boolean;
   onQuantityChange: (q: number) => void;
 };
 
-export function OrderSummary({ product, variant, quantity, onQuantityChange }: Props) {
+export function OrderSummary({ product, variant, quantity, engraving, onQuantityChange }: Props) {
   const subtotal = variant.priceKopecks * quantity;
-  const total = subtotal;
+  const engravingFee = engraving ? ENGRAVING_FEE_KOPECKS : 0;
+  const total = subtotal + engravingFee;
 
   return (
     <aside className="card shadow-brut p-6">
@@ -66,6 +68,12 @@ export function OrderSummary({ product, variant, quantity, onQuantityChange }: P
           <dt>Підсумок</dt>
           <dd>{formatUAH(subtotal)}</dd>
         </div>
+        {engraving && (
+          <div className="flex justify-between">
+            <dt>Гравіювання · F5 Club</dt>
+            <dd>+{formatUAH(engravingFee)}</dd>
+          </div>
+        )}
         <div className="flex justify-between">
           <dt>Доставка</dt>
           <dd className="caps text-xs">за тарифами нп</dd>

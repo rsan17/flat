@@ -2,14 +2,31 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { BOARD_001 } from "@/lib/products";
+import { BOARD_001, ENGRAVING_FEE_KOPECKS } from "@/lib/products";
 import { formatUAH } from "@/lib/utils";
 
 export function Product() {
   const [variantSku, setVariantSku] = useState(BOARD_001.variants[0].sku);
+  const [engraving, setEngraving] = useState(false);
+  const [nickname, setNickname] = useState("");
   const variant =
     BOARD_001.variants.find((v) => v.sku === variantSku) ??
     BOARD_001.variants[0];
+
+  const nicknameTrim = nickname.trim();
+  const canSubmit = !engraving || nicknameTrim.length >= 2;
+  const totalKopecks =
+    variant.priceKopecks + (engraving ? ENGRAVING_FEE_KOPECKS : 0);
+
+  const params = new URLSearchParams({
+    product: BOARD_001.sku,
+    variant: variant.sku,
+  });
+  if (engraving && nicknameTrim) {
+    params.set("engraving", "1");
+    params.set("nickname", nicknameTrim);
+  }
+  const checkoutHref = `/checkout?${params.toString()}`;
 
   return (
     <section id="product" className="border-b-2 border-ink bg-bone">
@@ -68,13 +85,66 @@ export function Product() {
             </div>
           </div>
 
+          <div className="mt-6 border-2 border-ink bg-paper p-4">
+            <label className="flex cursor-pointer items-start gap-3">
+              <input
+                type="checkbox"
+                className="mt-1 h-4 w-4 border-2 border-ink accent-ink"
+                checked={engraving}
+                onChange={(e) => setEngraving(e.target.checked)}
+              />
+              <div className="flex-1">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="caps text-xs font-bold">
+                    гравіювання нікнейма · f5 club
+                  </span>
+                  <span className="font-display text-lg">
+                    +{formatUAH(ENGRAVING_FEE_KOPECKS)}
+                  </span>
+                </div>
+                <p className="mt-1 text-xs opacity-70">
+                  Персоналізація для учасників F5 Chess Club — твій нікнейм
+                  лазером на дошці.
+                </p>
+              </div>
+            </label>
+            {engraving && (
+              <div className="mt-4">
+                <label className="caps block text-[11px] opacity-70">
+                  нікнейм для гравіювання
+                </label>
+                <input
+                  type="text"
+                  className="input mt-1"
+                  placeholder="Напр. tester"
+                  maxLength={40}
+                  value={nickname}
+                  onChange={(e) => setNickname(e.target.value)}
+                />
+                {!canSubmit && (
+                  <p className="caps mt-1 text-[11px] text-red-600">
+                    Мінімум 2 символи
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <Link
-              href={`/checkout?product=${BOARD_001.sku}&variant=${variant.sku}`}
-              className="btn btn-lilac"
-            >
-              додати в замовлення
-            </Link>
+            {canSubmit ? (
+              <Link href={checkoutHref} className="btn btn-lilac">
+                додати в замовлення · {formatUAH(totalKopecks)}
+              </Link>
+            ) : (
+              <button
+                type="button"
+                disabled
+                className="btn btn-lilac opacity-60"
+                aria-disabled
+              >
+                додати в замовлення · {formatUAH(totalKopecks)}
+              </button>
+            )}
             <span className="caps text-xs opacity-70">
               доставка нп · оплата mono
             </span>
