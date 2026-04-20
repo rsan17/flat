@@ -15,28 +15,18 @@ export type Product = {
 export const BOARD_001: Product = {
   sku: "board-001",
   title: "THE BOARD · 001",
-  tagline: "Дубова дошка. Ручний розпис. Лімітовані серії.",
+  tagline: "3D-друк, магнітна фіксація. Лімітована серія — 55 штук.",
   variants: [
     {
-      sku: "pro",
-      name: "PRO — 40 cm",
-      description: "Турнірний розмір. Дуб + горіх. 40×40 см.",
-      priceKopecks: 189000,
-    },
-    {
-      sku: "classic",
-      name: "CLASSIC — 35 cm",
-      description: "Класичний розмір. Дуб + ясен. 35×35 см.",
-      priceKopecks: 149000,
-    },
-    {
-      sku: "mini",
-      name: "MINI — 28 cm",
-      description: "Компактний розмір. Бук + венге. 28×28 см.",
-      priceKopecks: 99000,
+      sku: "standard",
+      name: "THE BOARD — 17 cm",
+      description: "Компактний формат. 3D-друк, магнітна фіксація. 17×17 см.",
+      priceKopecks: 79900,
     },
   ],
 };
+
+export const ENGRAVING_FEE_KOPECKS = 10000;
 
 export const PRODUCTS: Record<string, Product> = {
   [BOARD_001.sku]: BOARD_001,

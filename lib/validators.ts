@@ -18,6 +18,7 @@ const basePersonal = z.object({
   phone: z.string().trim().regex(phoneRegex, "Формат: +380XXXXXXXXX"),
   email: z.string().trim().email("Некоректний email"),
   clubMemberName: z.string().trim().max(80).optional().or(z.literal("")),
+  engraving: z.boolean().default(false),
   comment: z.string().trim().max(500).optional().or(z.literal("")),
   consent: z.literal(true, { message: "Потрібна згода на обробку даних" }),
   productSku: z.string().min(1),
@@ -48,3 +49,13 @@ export const checkoutSchema = z.discriminatedUnion("deliveryType", [
 export type CheckoutInput = z.infer<typeof checkoutSchema>;
 
 export const PICKUP_ADDRESS = "Львів, вул. Шевченка 1 (майстерня)";
+
+export const clubJoinSchema = z.object({
+  fullName: z.string().trim().min(2, "Вкажіть ім'я та прізвище").max(80),
+  phone: z.string().trim().regex(phoneRegex, "Формат: +380XXXXXXXXX"),
+  nickname: z.string().trim().min(2, "Вкажіть нікнейм").max(40),
+  chessHandle: z.string().trim().max(60).optional().or(z.literal("")),
+  consent: z.literal(true, { message: "Потрібна згода на обробку даних" }),
+});
+
+export type ClubJoinInput = z.infer<typeof clubJoinSchema>;

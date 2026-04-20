@@ -11,9 +11,16 @@ import type { Product, ProductVariant } from "@/lib/products";
 type Props = {
   product: Product;
   variant: ProductVariant;
+  initialEngraving?: boolean;
+  initialClubMemberName?: string;
 };
 
-export function CheckoutForm({ product, variant }: Props) {
+export function CheckoutForm({
+  product,
+  variant,
+  initialEngraving = false,
+  initialClubMemberName = "",
+}: Props) {
   const [serverError, setServerError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -23,6 +30,8 @@ export function CheckoutForm({ product, variant }: Props) {
     control,
     watch,
     setValue,
+    setError,
+    setFocus,
     formState: { errors },
   } = useForm<CheckoutInput>({
     resolver: zodResolver(checkoutSchema),
@@ -36,7 +45,8 @@ export function CheckoutForm({ product, variant }: Props) {
       warehouse: "",
       warehouseRef: "",
       deliveryType: "warehouse",
-      clubMemberName: "",
+      clubMemberName: initialClubMemberName,
+      engraving: initialEngraving,
       comment: "",
       consent: undefined as unknown as true,
       productSku: product.sku,
@@ -46,6 +56,7 @@ export function CheckoutForm({ product, variant }: Props) {
   });
 
   const quantity = watch("quantity");
+  const engraving = watch("engraving");
 
   function handlePhoneInput(e: React.ChangeEvent<HTMLInputElement>) {
     let v = e.target.value.replace(/\D/g, "");
@@ -56,6 +67,14 @@ export function CheckoutForm({ product, variant }: Props) {
 
   async function onSubmit(data: CheckoutInput) {
     setServerError(null);
+    if (data.engraving && (data.clubMemberName ?? "").trim().length < 2) {
+      setError("clubMemberName", {
+        type: "manual",
+        message: "Вкажіть нікнейм для гравіювання",
+      });
+      setFocus("clubMemberName");
+      return;
+    }
     setSubmitting(true);
     try {
       const res = await fetch("/api/order/create", {
@@ -150,12 +169,14 @@ export function CheckoutForm({ product, variant }: Props) {
             </div>
             <div className="field md:col-span-2">
               <label>
-                Ім&apos;я учасника клубу{" "}
-                <span className="opacity-60">(опційно)</span>
+                Нікнейм · F5 Chess Club{" "}
+                <span className="opacity-60">
+                  {engraving ? "(потрібно для гравіювання)" : "(опційно)"}
+                </span>
               </label>
               <input
                 className="input"
-                placeholder="Якщо ви член THE BOARD Chess Club"
+                placeholder="Якщо ви учасник F5 Chess Club"
                 {...register("clubMemberName")}
                 aria-invalid={!!errors.clubMemberName}
               />
@@ -164,6 +185,24 @@ export function CheckoutForm({ product, variant }: Props) {
                   {errors.clubMemberName.message as string}
                 </div>
               )}
+            </div>
+            <div className="field md:col-span-2">
+              <label className="flex cursor-pointer items-start gap-3 text-sm">
+                <input
+                  type="checkbox"
+                  className="chk mt-1"
+                  {...register("engraving")}
+                />
+                <span className="flex-1">
+                  <b className="caps text-xs">
+                    гравіювання нікнейма · +100 ₴
+                  </b>
+                  <span className="mt-1 block text-xs opacity-70">
+                    Персоналізація для учасників F5 Chess Club — твій нікнейм
+                    лазером на дошці.
+                  </span>
+                </span>
+              </label>
             </div>
           </div>
         </section>
@@ -262,6 +301,7 @@ export function CheckoutForm({ product, variant }: Props) {
             product={product}
             variant={variant}
             quantity={quantity}
+            engraving={engraving}
             onQuantityChange={(q) =>
               setValue("quantity", q, { shouldValidate: true })
             }

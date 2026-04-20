@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { checkoutSchema } from "@/lib/validators";
-import { findVariant } from "@/lib/products";
+import { findVariant, ENGRAVING_FEE_KOPECKS } from "@/lib/products";
 import { generateOrderNumber } from "@/lib/utils";
 import { createMonoInvoice } from "@/lib/mono";
 import {
@@ -29,6 +29,16 @@ export async function POST(req: Request) {
   }
   const data = parsed.data;
 
+  if (data.engraving && (data.clubMemberName ?? "").trim().length < 2) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "Для гравіювання потрібен нікнейм (мінімум 2 символи)",
+      },
+      { status: 400 },
+    );
+  }
+
   const found = findVariant(data.productSku, data.variantSku);
   if (!found) {
     return NextResponse.json(
@@ -37,7 +47,8 @@ export async function POST(req: Request) {
     );
   }
 
-  const total = found.variant.priceKopecks * data.quantity;
+  const engravingFee = data.engraving ? ENGRAVING_FEE_KOPECKS : 0;
+  const total = found.variant.priceKopecks * data.quantity + engravingFee;
   const id = randomUUID();
   const orderNumber = generateOrderNumber();
 
@@ -81,6 +92,8 @@ export async function POST(req: Request) {
     np_warehouse_ref: isPickup ? "" : data.warehouseRef ?? "",
     np_delivery_type: data.deliveryType,
     club_member_name: data.clubMemberName?.trim() || null,
+    engraving: data.engraving,
+    engraving_fee: engravingFee,
     product_sku: data.productSku,
     product_variant: data.variantSku,
     quantity: data.quantity,

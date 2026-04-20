@@ -1,4 +1,5 @@
 import { About } from "@/components/landing/about";
+import { ChessClub } from "@/components/landing/chess-club";
 import { CTA } from "@/components/landing/cta";
 import { Footer } from "@/components/landing/footer";
 import { Hero } from "@/components/landing/hero";
@@ -15,11 +16,12 @@ export default function Home() {
         <Hero />
         <About />
         <Marquee
-          items={["DROP·001", "12/12", "UA MADE", "OAK·WALNUT", "FUTURA"]}
+          items={["DROP·001", "55/55", "UA MADE", "3D·PRINT", "FUTURA"]}
           variant="lilac"
         />
         <Product />
         <CTA />
+        <ChessClub />
       </main>
       <Footer />
     </>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export function Hero() {
@@ -13,15 +14,19 @@ export function Hero() {
             У ВСІХ.
           </h1>
           <p className="mt-8 max-w-xl text-lg md:text-xl">
-            Кастомні дошки ручної роботи. Масив дуба, горіха, бука. Маркування
-            лазером. Обмежена серія — 12 штук на дроп.
+            Кастомні дошки ручної роботи, створені за допомогою 3D-друку нового
+            покоління. Продумана вага кожної фігури, магнітна фіксація та
+            компактність — для ідеального відчуття гри.
+            <span className="mt-3 block text-sm opacity-80 md:text-base">
+              Обмежена серія — лише 55 штук на дроп.
+            </span>
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link
-              href="/checkout?product=board-001&variant=pro"
+              href="/checkout?product=board-001&variant=standard"
               className="btn btn-lilac"
             >
-              купити · 1 890 ₴
+              купити · 799 ₴
             </Link>
             <a href="#product" className="btn btn-outline">
               дивитись дошку
@@ -29,11 +34,11 @@ export function Hero() {
           </div>
           <div className="mt-10 grid grid-cols-3 gap-4 text-sm">
             <div>
-              <div className="font-display text-3xl">12</div>
+              <div className="font-display text-3xl">55</div>
               <div className="caps text-[10px] opacity-70">штук на дроп</div>
             </div>
             <div>
-              <div className="font-display text-3xl">2 тиж</div>
+              <div className="font-display text-3xl">5–7 днів</div>
               <div className="caps text-[10px] opacity-70">виготовлення</div>
             </div>
             <div>
@@ -44,26 +49,17 @@ export function Hero() {
         </div>
 
         <div className="md:col-span-5">
-          <div className="shadow-brut relative aspect-[4/5] border-2 border-ink bg-lilac">
-            <div className="absolute inset-6 grid grid-cols-8 grid-rows-8">
-              {Array.from({ length: 64 }).map((_, i) => {
-                const row = Math.floor(i / 8);
-                const col = i % 8;
-                const dark = (row + col) % 2 === 1;
-                return (
-                  <div
-                    key={i}
-                    className={dark ? "bg-ink" : "bg-paper"}
-                    aria-hidden
-                  />
-                );
-              })}
-            </div>
-            <div className="caps absolute bottom-3 left-3 bg-paper px-2 py-1 text-[10px]">
-              фото скоро
-            </div>
+          <div className="shadow-brut relative aspect-[4/5] overflow-hidden border-2 border-ink bg-lilac">
+            <Image
+              src="/hero-board.png"
+              alt="THE BOARD — фіолетово-біла шахова дошка з 3D-друкованими фігурами, вид зверху"
+              fill
+              priority
+              sizes="(min-width: 768px) 40vw, 100vw"
+              className="object-cover"
+            />
             <div className="caps absolute right-3 top-3 bg-ink px-2 py-1 text-[10px] text-lilac">
-              001/012
+              001/055
             </div>
           </div>
         </div>
