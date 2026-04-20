@@ -55,7 +55,7 @@ export function Hero() {
               className="pointer-events-none absolute bottom-[-18%] left-[28%] right-0 top-[55%] -z-0 rounded-[50%] bg-ink/35 blur-2xl md:blur-3xl"
             />
             <Image
-              src="/hero-board.png"
+              src="/hero-board.webp"
               alt="THE BOARD — 3D-друкована шахова дошка F5 CHESS CLUB, вид збоку"
               width={3024}
               height={1599}
