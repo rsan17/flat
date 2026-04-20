@@ -4,9 +4,20 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-30 border-b-2 border-ink bg-paper/95 backdrop-blur">
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-3">
-        <Link href="/" className="font-display text-2xl tracking-tightest">
-          THE·BOARD
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/"
+            className="caps text-[10px] opacity-70 hover:opacity-100"
+          >
+            ← FLAT5
+          </Link>
+          <Link
+            href="/team-onboarding"
+            className="font-display text-2xl tracking-tightest"
+          >
+            THE·BOARD
+          </Link>
+        </div>
         <nav className="hidden items-center gap-8 md:flex">
           <a href="#about" className="caps text-xs hover:underline">
             про дроп

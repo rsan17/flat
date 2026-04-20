@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "THE BOARD — кастомні шахові дашки",
+  title: "FLAT5 — місце своїх · Львів, площа Ринок 39",
   description:
-    "Ручна робота. Лімітовані серії. Стріт-стиль на вашому столі. Оплата онлайн, доставка Новою поштою.",
+    "FLAT5 — місце своїх у центрі Львова. Навпроти ратуші, без вивіски. Натискай «5» на домофоні — і заходь.",
   openGraph: {
-    title: "THE BOARD",
-    description: "Кастомні шахові дашки. Лімітований дроп.",
+    title: "FLAT5 — місце своїх",
+    description:
+      "Львів, площа Ринок 39. Без вивіски — тільки код на домофоні.",
     type: "website",
   },
 };

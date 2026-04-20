@@ -29,7 +29,7 @@ export async function POST(req: Request) {
   }
   const data = parsed.data;
 
-  if (data.engraving && (data.clubMemberName ?? "").trim().length < 2) {
+  if (data.engraving === true && (data.clubMemberName ?? "").trim().length < 2) {
     return NextResponse.json(
       {
         ok: false,
@@ -47,7 +47,8 @@ export async function POST(req: Request) {
     );
   }
 
-  const engravingFee = data.engraving ? ENGRAVING_FEE_KOPECKS : 0;
+  const engraving = data.engraving === true;
+  const engravingFee = engraving ? ENGRAVING_FEE_KOPECKS : 0;
   const total = found.variant.priceKopecks * data.quantity + engravingFee;
   const id = randomUUID();
   const orderNumber = generateOrderNumber();
@@ -92,7 +93,7 @@ export async function POST(req: Request) {
     np_warehouse_ref: isPickup ? "" : data.warehouseRef ?? "",
     np_delivery_type: data.deliveryType,
     club_member_name: data.clubMemberName?.trim() || null,
-    engraving: data.engraving,
+    engraving,
     engraving_fee: engravingFee,
     product_sku: data.productSku,
     product_variant: data.variantSku,

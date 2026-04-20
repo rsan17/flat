@@ -274,11 +274,6 @@ export function CheckoutForm({
             <div className="err">{errors.consent.message as string}</div>
           )}
 
-          <div className="border-2 border-ink bg-lilac p-4 text-sm">
-            <b className="caps text-xs">Увага:</b> виготовлення до 2 тижнів.
-            Відправка після виготовлення.
-          </div>
-
           {serverError && (
             <div className="err border-2 border-[#cc0033] bg-[#cc0033]/10 p-3">
               {serverError}

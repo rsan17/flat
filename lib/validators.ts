@@ -18,7 +18,7 @@ const basePersonal = z.object({
   phone: z.string().trim().regex(phoneRegex, "Формат: +380XXXXXXXXX"),
   email: z.string().trim().email("Некоректний email"),
   clubMemberName: z.string().trim().max(80).optional().or(z.literal("")),
-  engraving: z.boolean().default(false),
+  engraving: z.boolean().optional(),
   comment: z.string().trim().max(500).optional().or(z.literal("")),
   consent: z.literal(true, { message: "Потрібна згода на обробку даних" }),
   productSku: z.string().min(1),
