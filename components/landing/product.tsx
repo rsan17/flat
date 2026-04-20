@@ -22,11 +22,11 @@ const GALLERY = [
     video: true,
   },
   {
-    src: "/img/product_2.webp",
+    src: "/img/product_video.mov",
     alt: "THE BOARD — фігури, 3D-друк крупним планом",
     tag: "03 · PIECES",
     bg: "bg-lilac",
-    video: false,
+    video: true,
   },
   {
     src: "/img/product_4.webp",
