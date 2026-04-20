@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export function Hero() {
   return (
     <section className="grain relative border-b-2 border-ink bg-paper">
@@ -25,7 +27,14 @@ export function Hero() {
 
         <div className="md:col-span-5">
           <div className="shadow-brut relative aspect-[4/5] overflow-hidden border-2 border-ink bg-lilac">
-            <PlaceholderTag tag="01 · HERO" />
+            <Image
+              src="/img/main_1.jpg"
+              alt="FLAT5 — інтер'єр"
+              fill
+              priority
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              className="object-cover"
+            />
             <span className="caps absolute right-3 top-3 bg-ink px-2 py-1 text-[10px] text-lilac">
               FLAT · 5
             </span>
@@ -33,13 +42,5 @@ export function Hero() {
         </div>
       </div>
     </section>
-  );
-}
-
-function PlaceholderTag({ tag }: { tag: string }) {
-  return (
-    <span className="caps absolute bottom-3 left-3 bg-ink px-2 py-1 text-[10px] text-lilac">
-      {tag} · фото скоро
-    </span>
   );
 }

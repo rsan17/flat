@@ -81,7 +81,7 @@ export default async function OrderSuccessPage({
             на головну
           </Link>
           <span className="caps text-xs opacity-70">
-            термін виготовлення — до 2 тижнів
+            термін виготовлення — 5-7 днів
           </span>
         </div>
       </main>
