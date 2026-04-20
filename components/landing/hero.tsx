@@ -49,14 +49,15 @@ export function Hero() {
         </div>
 
         <div className="md:col-span-5">
-          <div className="shadow-brut relative aspect-[5/4] overflow-hidden border-2 border-ink bg-ink">
+          <div className="relative">
             <Image
               src="/hero-board.png"
               alt="THE BOARD — 3D-друкована шахова дошка F5 CHESS CLUB, вид збоку"
-              fill
+              width={3024}
+              height={1599}
               priority
               sizes="(min-width: 768px) 40vw, 100vw"
-              className="object-cover"
+              className="h-auto w-full"
             />
             <div className="caps absolute right-3 top-3 bg-ink px-2 py-1 text-[10px] text-lilac">
               001/055
