@@ -8,30 +8,34 @@ import { formatUAH } from "@/lib/utils";
 
 const GALLERY = [
   {
-    src: "/board-01.jpg",
+    src: "/img/product_1.webp",
     alt: "F5 BOARD — складена дошка з фігурами на траві",
     tag: "01 · TOP",
     bg: "bg-paper",
+    video: false,
   },
   {
-    src: "/img/product_2.png",
-    alt: "F5 BOARD — фігури, 3D-друк крупним планом",
-    tag: "02 · PIECES",
-    bg: "bg-lilac",
-  },
-  {
-    src: "/img/product_3.png",
+    src: "/img/product_3_video.mov",
     alt: "F5 BOARD — ракурс збоку, магнітна фіксація",
-    tag: "03 · ANGLE",
+    tag: "02 · ANGLE",
     bg: "bg-ink",
+    video: true,
   },
   {
-    src: "/img/product_4.png",
+    src: "/img/product_video.mov",
+    alt: "F5 BOARD — фігури, 3D-друк крупним планом",
+    tag: "03 · PIECES",
+    bg: "bg-lilac",
+    video: true,
+  },
+  {
+    src: "/img/product_4.webp",
     alt: "F5 BOARD — деталь поверхні та розмітка",
     tag: "04 · DETAIL",
     bg: "bg-paper",
+    video: false,
   },
-] as const;
+];
 
 export function Product() {
   const [variantSku, setVariantSku] = useState(BOARD_001.variants[0].sku);
@@ -66,13 +70,24 @@ export function Product() {
                 key={shot.tag}
                 className={`shadow-brut relative aspect-square overflow-hidden border-2 border-ink ${shot.bg}`}
               >
-                <Image
-                  src={shot.src}
-                  alt={shot.alt}
-                  fill
-                  sizes="(min-width: 1024px) 30vw, (min-width: 768px) 40vw, 50vw"
-                  className="object-cover"
-                />
+                {shot.video ? (
+                  <video
+                    src={shot.src}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                ) : (
+                  <Image
+                    src={shot.src}
+                    alt={shot.alt}
+                    fill
+                    sizes="(min-width: 1024px) 30vw, (min-width: 768px) 40vw, 50vw"
+                    className="object-cover"
+                  />
+                )}
                 <span className="caps absolute bottom-3 left-3 bg-ink px-2 py-1 text-[10px] text-lilac">
                   {shot.tag}
                 </span>
@@ -144,7 +159,7 @@ export function Product() {
             {engraving && (
               <div className="mt-4">
                 <label className="caps block text-[11px] opacity-70">
-                  нікнейм для гравіювання
+                  нікнейм для гравіювання · макс. 14 символів
                 </label>
                 <input
                   type="text"
