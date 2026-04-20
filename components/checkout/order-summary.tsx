@@ -84,7 +84,7 @@ export function OrderSummary({ product, variant, quantity, engraving, onQuantity
         <span className="font-display text-4xl">{formatUAH(total)}</span>
       </div>
       <p className="mt-4 rounded-sm bg-lilac px-3 py-2 text-xs">
-        Виготовлення до <b>2 тижнів</b>. Після цього — відправка Новою поштою.
+        Виготовлення <b>5-7 днів</b>. Після цього — відправка Новою поштою.
       </p>
     </aside>
   );

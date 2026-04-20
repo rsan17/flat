@@ -14,12 +14,9 @@ export function Hero() {
             У ВСІХ.
           </h1>
           <p className="mt-8 max-w-xl text-lg md:text-xl">
-            Кастомні дошки ручної роботи, створені за допомогою 3D-друку нового
-            покоління. Продумана вага кожної фігури, магнітна фіксація та
-            компактність — для ідеального відчуття гри.
-            <span className="mt-3 block text-sm opacity-80 md:text-base">
-              Обмежена серія — лише 55 штук на дроп.
-            </span>
+            Кастомні дошки, створені за допомогою 3D-друку нового покоління.
+            Продумана вага кожної фігури, магнітна фіксація та компактність —
+            для ідеального відчуття гри.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link
@@ -32,7 +29,7 @@ export function Hero() {
               дивитись дошку
             </a>
           </div>
-          <div className="mt-10 grid grid-cols-3 gap-4 text-sm">
+          <div className="mt-10 grid grid-cols-2 gap-4 text-sm">
             <div>
               <div className="font-display text-3xl">55</div>
               <div className="caps text-[10px] opacity-70">штук на дроп</div>
@@ -40,10 +37,6 @@ export function Hero() {
             <div>
               <div className="font-display text-3xl">5–7 днів</div>
               <div className="caps text-[10px] opacity-70">виготовлення</div>
-            </div>
-            <div>
-              <div className="font-display text-3xl">UA</div>
-              <div className="caps text-[10px] opacity-70">львів · київ</div>
             </div>
           </div>
         </div>

@@ -159,13 +159,13 @@ export function Product() {
             {engraving && (
               <div className="mt-4">
                 <label className="caps block text-[11px] opacity-70">
-                  нікнейм для гравіювання
+                  нікнейм для гравіювання · макс. 14 символів
                 </label>
                 <input
                   type="text"
                   className="input mt-1"
                   placeholder="Напр. tester"
-                  maxLength={40}
+                  maxLength={14}
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
                 />
