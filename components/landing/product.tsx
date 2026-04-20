@@ -8,8 +8,8 @@ import { formatUAH } from "@/lib/utils";
 
 const GALLERY = [
   {
-    src: "/hero-board.png",
-    alt: "THE BOARD — вид зверху, фіолетово-біла дошка з фігурами",
+    src: "/board-01.jpg",
+    alt: "THE BOARD — складена дошка з фігурами на траві",
     tag: "01 · TOP",
     bg: "bg-paper",
   },

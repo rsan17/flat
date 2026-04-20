@@ -4,10 +4,10 @@ import Link from "next/link";
 export function Hero() {
   return (
     <section className="grain relative border-b-2 border-ink bg-paper">
-      <div className="relative z-[2] mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-6 py-14 md:grid-cols-12 md:py-20">
-        <div className="md:col-span-7">
+      <div className="relative z-[2] mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-10 px-6 py-14 md:grid-cols-12 md:py-20">
+        <div className="md:col-span-6">
           <p className="caps mb-6 text-xs">DROP 001 · UA · HANDMADE</p>
-          <h1 className="font-display text-[13vw] leading-[0.82] md:text-[10vw] lg:text-[9.5rem]">
+          <h1 className="font-display text-[13vw] leading-[0.82] md:text-[8.5vw] lg:text-[8rem]">
             ШАХИ
             <br />
             <span className="inline-block bg-lilac px-3 py-1">НЕ ЯК</span>{" "}
@@ -48,15 +48,20 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="md:col-span-5">
-          <div className="shadow-brut relative aspect-[4/5] overflow-hidden border-2 border-ink bg-lilac">
+        <div className="md:col-span-6">
+          <div className="relative">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute bottom-[-18%] left-[28%] right-[-10%] top-[55%] -z-0 rounded-[50%] bg-ink/35 blur-2xl md:blur-3xl"
+            />
             <Image
               src="/hero-board.png"
-              alt="THE BOARD — фіолетово-біла шахова дошка з 3D-друкованими фігурами, вид зверху"
-              fill
+              alt="THE BOARD — 3D-друкована шахова дошка F5 CHESS CLUB, вид збоку"
+              width={3024}
+              height={1599}
               priority
-              sizes="(min-width: 768px) 40vw, 100vw"
-              className="object-cover"
+              sizes="(min-width: 1024px) 50vw, (min-width: 768px) 50vw, 100vw"
+              className="relative h-auto w-full"
             />
             <div className="caps absolute right-3 top-3 bg-ink px-2 py-1 text-[10px] text-lilac">
               001/055
