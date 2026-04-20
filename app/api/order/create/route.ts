@@ -9,6 +9,7 @@ import {
   supabaseConfigured,
 } from "@/lib/supabase";
 import { saveOrderLocal, type OrderRecord } from "@/lib/order-store";
+import { sendOrderTelegramNotification } from "@/lib/telegram";
 
 export const runtime = "nodejs";
 
@@ -120,6 +121,28 @@ export async function POST(req: Request) {
     }
   } else {
     saveOrderLocal(record);
+  }
+
+  const tg = await sendOrderTelegramNotification({
+    orderNumber,
+    firstName: data.firstName,
+    lastName: data.lastName,
+    phone: data.phone,
+    email: data.email,
+    deliveryType: data.deliveryType,
+    city: isPickup ? "" : data.city ?? "",
+    warehouse: isPickup ? "" : data.warehouse ?? "",
+    productTitle: found.product.title,
+    variantName: found.variant.name,
+    quantity: data.quantity,
+    totalKopecks: total,
+    engraving,
+    engravingFee,
+    clubMemberName: data.clubMemberName?.trim() || null,
+    comment: data.comment || null,
+  });
+  if (!tg.ok) {
+    console.error("Telegram notification failed:", tg.error);
   }
 
   return NextResponse.json({
