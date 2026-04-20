@@ -21,19 +21,19 @@ export const BOARD_001: Product = {
       sku: "pro",
       name: "PRO — 40 cm",
       description: "Турнірний розмір. Дуб + горіх. 40×40 см.",
-      priceKopecks: 189000,
+      priceKopecks: 100,
     },
     {
       sku: "classic",
       name: "CLASSIC — 35 cm",
       description: "Класичний розмір. Дуб + ясен. 35×35 см.",
-      priceKopecks: 149000,
+      priceKopecks: 100,
     },
     {
       sku: "mini",
       name: "MINI — 28 cm",
       description: "Компактний розмір. Бук + венге. 28×28 см.",
-      priceKopecks: 99000,
+      priceKopecks: 100,
     },
   ],
 };
