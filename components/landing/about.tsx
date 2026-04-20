@@ -1,0 +1,42 @@
+export function About() {
+  return (
+    <section id="about" className="border-b-2 border-ink bg-paper">
+      <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-6 py-20 md:grid-cols-12">
+        <div className="md:col-span-4">
+          <p className="caps text-xs">001 — ABOUT</p>
+          <h2 className="font-display mt-4 text-6xl md:text-7xl">
+            ДОШКА,
+            <br />
+            ЯКУ ПОМІТЯТЬ.
+          </h2>
+        </div>
+        <div className="space-y-6 text-lg md:col-span-7 md:col-start-6">
+          <p>
+            Ми робимо шахи для тих, кому набридли штампи з магазину. Кожна дошка
+            збирається вручну у Львові. Масив, маслом, лазером — без лаку, без
+            пластику, без компромісів.
+          </p>
+          <p>
+            THE BOARD — це шаховий об’єкт, який однаково вписується у вітальню,
+            студію і тату-салон. Стріт-естетика, класичні розміри, фігури з
+            горіха та клена.
+          </p>
+          <ul className="mt-6 grid gap-3 text-base">
+            <li className="border-l-4 border-lilac pl-4">
+              <span className="caps text-[11px] opacity-70">матеріал</span>
+              <div>Дуб · горіх · бук. Олія з воском.</div>
+            </li>
+            <li className="border-l-4 border-lilac pl-4">
+              <span className="caps text-[11px] opacity-70">номер</span>
+              <div>Кожна дошка має власний номер із 12.</div>
+            </li>
+            <li className="border-l-4 border-lilac pl-4">
+              <span className="caps text-[11px] opacity-70">фігури</span>
+              <div>Повний набір у лляному мішечку.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
