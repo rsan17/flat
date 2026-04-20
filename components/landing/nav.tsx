@@ -7,15 +7,9 @@ export function Nav() {
         <div className="flex items-center gap-4">
           <Link
             href="/"
-            className="caps text-[10px] opacity-70 hover:opacity-100"
-          >
-            ← FLAT5
-          </Link>
-          <Link
-            href="/team-onboarding"
             className="font-display text-2xl tracking-tightest"
           >
-            THE·BOARD
+            F5·BOARD
           </Link>
         </div>
         <nav className="hidden items-center gap-8 md:flex">

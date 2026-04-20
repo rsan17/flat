@@ -11,27 +11,23 @@ export function CTA() {
           <div className="md:col-span-7">
             <p className="caps text-xs text-lilac">003 — FAQ</p>
             <h2 className="font-display mt-4 text-6xl leading-[0.9] md:text-8xl">
-              ЗАМОВ ДО <span className="text-lilac">ДРОП·002</span>.
+              ЛІМІТОВАНИЙ ДРОП.
               <br />
-              ВІДПРАВКА — 2 ТИЖНІ.
+              <span className="text-lilac">ЛИШЕ 55 ДОШОК.</span>
             </h2>
           </div>
           <dl className="space-y-8 text-base md:col-span-5 md:col-start-8">
             <FAQItem
               q="Як швидко я отримаю дошку?"
-              a="Виготовлення — до 14 днів. Потім відправка Новою поштою на відділення або поштомат."
+              a="Виготовлення — 5–7 днів. Потім самовивіз з FLAT5 або доставка Новою поштою через відділення або поштомат."
             />
             <FAQItem
               q="Чи можна повернути?"
-              a="Так, протягом 14 днів, якщо дошка не була у використанні. Кастомне гравіювання — без повернення."
+              a="Так, протягом 14 днів, якщо дошка не була у використанні. Дошки з кастомним гравіюванням поверненню не підлягають."
             />
             <FAQItem
               q="Як я плачу?"
               a="Онлайн через monobank-еквайринг. Apple Pay, Google Pay, картка."
-            />
-            <FAQItem
-              q="Фігури окремо?"
-              a="Поки що тільки в комплекті. Окремий дроп фігур — восени."
             />
           </dl>
         </div>
@@ -41,7 +37,7 @@ export function CTA() {
             ГОТОВІ РОБИТИ ХІД?
           </div>
           <Link href="/checkout?product=board-001&variant=standard" className="btn btn-lilac">
-            замовити · дроп 001
+            замовити
           </Link>
         </div>
       </div>

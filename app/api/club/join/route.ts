@@ -6,7 +6,7 @@ import {
   saveClubMemberLocal,
 } from "@/lib/club-store";
 
-const FALLBACK_INVITE = "https://t.me/+placeholder_f5_chess_club";
+const FALLBACK_INVITE = "https://t.me/f5chess";
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);

@@ -9,25 +9,25 @@ import { formatUAH } from "@/lib/utils";
 const GALLERY = [
   {
     src: "/board-01.jpg",
-    alt: "THE BOARD — складена дошка з фігурами на траві",
+    alt: "F5 BOARD — складена дошка з фігурами на траві",
     tag: "01 · TOP",
     bg: "bg-paper",
   },
   {
     src: "/img/product_2.png",
-    alt: "THE BOARD — фігури, 3D-друк крупним планом",
+    alt: "F5 BOARD — фігури, 3D-друк крупним планом",
     tag: "02 · PIECES",
     bg: "bg-lilac",
   },
   {
     src: "/img/product_3.png",
-    alt: "THE BOARD — ракурс збоку, магнітна фіксація",
+    alt: "F5 BOARD — ракурс збоку, магнітна фіксація",
     tag: "03 · ANGLE",
     bg: "bg-ink",
   },
   {
     src: "/img/product_4.png",
-    alt: "THE BOARD — деталь поверхні та розмітка",
+    alt: "F5 BOARD — деталь поверхні та розмітка",
     tag: "04 · DETAIL",
     bg: "bg-paper",
   },
@@ -149,8 +149,8 @@ export function Product() {
                 <input
                   type="text"
                   className="input mt-1"
-                  placeholder="Напр. tester"
-                  maxLength={40}
+                  placeholder="Напр. ilovehikaru"
+                  maxLength={14}
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
                 />
