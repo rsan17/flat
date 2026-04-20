@@ -10,7 +10,7 @@ export default function TermsPage() {
       <Link href="/" className="caps text-xs opacity-70 hover:opacity-100">
         ← на головну
       </Link>
-      <h1 className="font-display mt-8 text-6xl">УМОВИ СЕРВІСУ</h1>
+      <h1 className="font-display mt-8 text-5xl md:text-6xl">УМОВИ СЕРВІСУ</h1>
       <div className="prose-custom mt-10 space-y-6 text-base leading-relaxed">
         <section>
           <h2 className="caps text-sm opacity-70">1 · продавець</h2>

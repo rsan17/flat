@@ -6,7 +6,7 @@ export function BoardCTA() {
       <div className="relative z-[2] mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-6 py-20 md:grid-cols-12 md:py-28">
         <div className="md:col-span-7">
           <p className="caps text-xs">004 — F5·BOARD</p>
-          <h2 className="font-display mt-4 text-6xl leading-[0.9] md:text-8xl">
+          <h2 className="font-display mt-4 text-5xl leading-[0.9] md:text-8xl">
             У НАС Є
             <br />
             <span className="inline-block bg-ink px-3 py-1 text-lilac">

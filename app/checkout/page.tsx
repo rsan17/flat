@@ -46,7 +46,7 @@ export default async function CheckoutPage({
       </div>
       <main className="py-12">
         <div className="mx-auto mb-10 max-w-[1400px] px-6">
-          <h1 className="font-display text-6xl md:text-7xl">ОФОРМЛЕННЯ</h1>
+          <h1 className="font-display text-5xl md:text-7xl">ОФОРМЛЕННЯ</h1>
           <p className="mt-2 text-base opacity-70">
             {hit.product.title} — {hit.variant.name}
           </p>
