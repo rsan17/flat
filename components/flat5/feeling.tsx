@@ -1,11 +1,20 @@
+import Image from "next/image";
+
 export function Feeling() {
   return (
     <section id="feeling" className="border-b-2 border-ink bg-bone">
       <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-6 py-24 md:grid-cols-12">
         <div className="md:col-span-5">
           <div className="shadow-brut relative aspect-[4/5] overflow-hidden border-2 border-ink bg-paper">
+            <Image
+              src="/img/main_4.webp"
+              alt="FLAT5 — атмосфера"
+              fill
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              className="object-cover"
+            />
             <span className="caps absolute bottom-3 left-3 bg-ink px-2 py-1 text-[10px] text-lilac">
-              07 · MOOD · фото скоро
+              07 · MOOD
             </span>
           </div>
         </div>

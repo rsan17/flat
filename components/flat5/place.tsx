@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export function Place() {
   return (
     <section id="place" className="border-b-2 border-ink bg-paper">
@@ -35,7 +37,18 @@ export function Place() {
 
         <div className="md:col-span-12">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <Photo tag="02 · RATUSHA" bg="bg-bone" />
+            <div className="shadow-brut relative aspect-square overflow-hidden border-2 border-ink bg-bone">
+              <Image
+                src="/img/main_3.jpg"
+                alt="FLAT5 — ратуша"
+                fill
+                sizes="(min-width: 1024px) 33vw, 100vw"
+                className="object-cover"
+              />
+              <span className="caps absolute bottom-3 left-3 bg-ink px-2 py-1 text-[10px] text-lilac">
+                02 · RATUSHA
+              </span>
+            </div>
             <Photo tag="03 · INTERIOR" bg="bg-lilac" />
             <Photo tag="04 · VIBE" bg="bg-paper" />
           </div>
