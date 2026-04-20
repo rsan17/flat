@@ -50,7 +50,7 @@ export function Place() {
               </span>
             </div>
             <a
-              href="https://www.google.com/maps/place/площа+Ринок,+39,+Львів"
+              href="https://maps.app.goo.gl/FR3B8nWqyTe6Suff7"
               target="_blank"
               rel="noopener noreferrer"
               className="shadow-brut relative block aspect-square overflow-hidden border-2 border-ink bg-bone"
