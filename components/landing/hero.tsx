@@ -21,7 +21,7 @@ export function Hero() {
               href="/checkout?product=board-001&variant=pro"
               className="btn btn-lilac"
             >
-              купити · 1 890 ₴
+              купити · 1 ₴
             </Link>
             <a href="#product" className="btn btn-outline">
               дивитись дошку
