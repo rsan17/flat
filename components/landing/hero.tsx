@@ -52,7 +52,7 @@ export function Hero() {
           <div className="relative">
             <div
               aria-hidden
-              className="pointer-events-none absolute bottom-[-18%] left-[28%] right-[-10%] top-[55%] -z-0 rounded-[50%] bg-ink/35 blur-2xl md:blur-3xl"
+              className="pointer-events-none absolute bottom-[-18%] left-[28%] right-0 top-[55%] -z-0 rounded-[50%] bg-ink/35 blur-2xl md:blur-3xl"
             />
             <Image
               src="/hero-board.png"
