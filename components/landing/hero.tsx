@@ -49,10 +49,10 @@ export function Hero() {
         </div>
 
         <div className="md:col-span-5">
-          <div className="shadow-brut relative aspect-[4/5] overflow-hidden border-2 border-ink bg-lilac">
+          <div className="shadow-brut relative aspect-[5/4] overflow-hidden border-2 border-ink bg-ink">
             <Image
               src="/hero-board.png"
-              alt="THE BOARD — фіолетово-біла шахова дошка з 3D-друкованими фігурами, вид зверху"
+              alt="THE BOARD — 3D-друкована шахова дошка F5 CHESS CLUB, вид збоку"
               fill
               priority
               sizes="(min-width: 768px) 40vw, 100vw"

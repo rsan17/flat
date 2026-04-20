@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { BOARD_001, ENGRAVING_FEE_KOPECKS } from "@/lib/products";
@@ -33,8 +34,19 @@ export function Product() {
       <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-6 py-20 md:grid-cols-12">
         <div className="md:col-span-7">
           <div className="grid grid-cols-2 gap-4">
-            <div className="shadow-brut relative aspect-square border-2 border-ink bg-paper">
-              <Placeholder tag="01 · TOP" />
+            <div className="shadow-brut relative aspect-square overflow-hidden border-2 border-ink bg-paper">
+              <Image
+                src="/board-01.jpg"
+                alt="THE BOARD — складена дошка з фігурами на траві"
+                fill
+                sizes="(min-width: 768px) 25vw, 50vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 flex items-end p-3">
+                <span className="caps bg-ink px-2 py-1 text-[10px] text-lilac">
+                  01 · TOP
+                </span>
+              </div>
             </div>
             <div className="shadow-brut relative aspect-square border-2 border-ink bg-lilac">
               <Placeholder tag="02 · PIECES" dark />
