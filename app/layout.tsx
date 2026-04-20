@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="uk">
-      <body className="overflow-x-hidden">
+      <body>
         {children}
         <div className="grain-fixed" aria-hidden="true" />
       </body>
