@@ -50,6 +50,10 @@ export function Hero() {
 
         <div className="md:col-span-6">
           <div className="relative">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-[6%] bottom-[-8%] top-[14%] -z-0 rounded-[45%] bg-ink/30 blur-2xl md:blur-3xl"
+            />
             <Image
               src="/hero-board.png"
               alt="THE BOARD — 3D-друкована шахова дошка F5 CHESS CLUB, вид збоку"
@@ -57,7 +61,7 @@ export function Hero() {
               height={1599}
               priority
               sizes="(min-width: 1024px) 50vw, (min-width: 768px) 50vw, 100vw"
-              className="h-auto w-full"
+              className="relative h-auto w-full"
             />
             <div className="caps absolute right-3 top-3 bg-ink px-2 py-1 text-[10px] text-lilac">
               001/055
