@@ -48,7 +48,7 @@ export default async function OrderSuccessPage({
       />
       <main className="mx-auto max-w-[900px] px-6 py-20">
         <p className="caps text-xs">успіх</p>
-        <h1 className="font-display mt-4 text-6xl md:text-8xl">
+        <h1 className="font-display mt-4 text-5xl md:text-8xl">
           ДЯКУЄМО,
           <br />
           <span className="bg-lilac px-2">{order.customer_first_name.toUpperCase()}!</span>

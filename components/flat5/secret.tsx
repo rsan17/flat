@@ -7,7 +7,7 @@ export function Secret() {
       <div className="relative z-[2] mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-6 py-24 md:grid-cols-12">
         <div className="md:col-span-5">
           <p className="caps text-xs text-lilac">002 — ЯК ЗНАЙТИ</p>
-          <h2 className="font-display mt-4 text-6xl leading-[0.9] md:text-8xl">
+          <h2 className="font-display mt-4 text-5xl leading-[0.9] md:text-8xl">
             БЕЗ
             <br />
             <span className="text-lilac">ВИВІСКИ.</span>

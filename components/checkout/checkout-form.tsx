@@ -199,7 +199,7 @@ export function CheckoutForm({
                   </b>
                   <span className="mt-1 block text-xs opacity-70">
                     Персоналізація для учасників F5 Chess Club — твій нікнейм
-                    лазером на дошці.
+                    на дошці.
                   </span>
                 </span>
               </label>

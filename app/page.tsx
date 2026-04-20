@@ -16,7 +16,7 @@ export default function Home() {
         <Hero />
         <About />
         <Marquee
-          items={["DROP·001", "55/55", "UA MADE", "3D·PRINT", "FUTURA"]}
+          items={["DROP·001", "55/55", "UA MADE", "3D·PRINT", "CASTLE"]}
           variant="lilac"
         />
         <Product />

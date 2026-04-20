@@ -6,7 +6,7 @@ export function Place() {
       <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-6 py-20 md:grid-cols-12">
         <div className="md:col-span-4">
           <p className="caps text-xs">001 — МІСЦЕ</p>
-          <h2 className="font-display mt-4 text-6xl md:text-7xl">
+          <h2 className="font-display mt-4 text-5xl md:text-7xl">
             ПРЯМО
             <br />В ЦЕНТРІ.
           </h2>

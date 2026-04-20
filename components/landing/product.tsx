@@ -152,7 +152,7 @@ export function Product() {
                 </div>
                 <p className="mt-1 text-xs opacity-70">
                   Персоналізація для учасників F5 Chess Club — твій нікнейм
-                  лазером на дошці.
+                  на дошці.
                 </p>
               </div>
             </label>

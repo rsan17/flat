@@ -10,7 +10,7 @@ export function CTA() {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
           <div className="md:col-span-7">
             <p className="caps text-xs text-lilac">003 — FAQ</p>
-            <h2 className="font-display mt-4 text-6xl leading-[0.9] md:text-8xl">
+            <h2 className="font-display mt-4 text-5xl leading-[0.9] md:text-8xl">
               ЛІМІТОВАНИЙ ДРОП.
               <br />
               <span className="text-lilac">ЛИШЕ 55 ДОШОК.</span>
