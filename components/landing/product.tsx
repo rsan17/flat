@@ -8,22 +8,22 @@ import { formatUAH } from "@/lib/utils";
 
 const GALLERY = [
   {
-    src: "/board-01.jpg",
+    src: "/img/product_1.png",
     alt: "THE BOARD — складена дошка з фігурами на траві",
     tag: "01 · TOP",
     bg: "bg-paper",
   },
   {
-    src: "/img/product_2.png",
-    alt: "THE BOARD — фігури, 3D-друк крупним планом",
-    tag: "02 · PIECES",
-    bg: "bg-lilac",
-  },
-  {
     src: "/img/product_3.png",
     alt: "THE BOARD — ракурс збоку, магнітна фіксація",
-    tag: "03 · ANGLE",
+    tag: "02 · ANGLE",
     bg: "bg-ink",
+  },
+  {
+    src: "/img/product_2.png",
+    alt: "THE BOARD — фігури, 3D-друк крупним планом",
+    tag: "03 · PIECES",
+    bg: "bg-lilac",
   },
   {
     src: "/img/product_4.png",
