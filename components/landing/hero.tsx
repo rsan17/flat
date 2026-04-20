@@ -17,6 +17,9 @@ export function Hero() {
             Кастомні дошки, створені за допомогою 3D-друку нового покоління.
             Продумана вага кожної фігури, магнітна фіксація та компактність —
             для ідеального відчуття гри.
+            <span className="mt-3 block text-sm opacity-80 md:text-base">
+              Обмежена серія — лише 55 штук на дроп.
+            </span>
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link
