@@ -6,6 +6,33 @@ import { useState } from "react";
 import { BOARD_001, ENGRAVING_FEE_KOPECKS } from "@/lib/products";
 import { formatUAH } from "@/lib/utils";
 
+const GALLERY = [
+  {
+    src: "/board-01.jpg",
+    alt: "THE BOARD — складена дошка з фігурами на траві",
+    tag: "01 · TOP",
+    bg: "bg-paper",
+  },
+  {
+    src: "/img/product_2.png",
+    alt: "THE BOARD — фігури, 3D-друк крупним планом",
+    tag: "02 · PIECES",
+    bg: "bg-lilac",
+  },
+  {
+    src: "/img/product_3.png",
+    alt: "THE BOARD — ракурс збоку, магнітна фіксація",
+    tag: "03 · ANGLE",
+    bg: "bg-ink",
+  },
+  {
+    src: "/img/product_4.png",
+    alt: "THE BOARD — деталь поверхні та розмітка",
+    tag: "04 · DETAIL",
+    bg: "bg-paper",
+  },
+] as const;
+
 export function Product() {
   const [variantSku, setVariantSku] = useState(BOARD_001.variants[0].sku);
   const [engraving, setEngraving] = useState(false);
@@ -34,29 +61,23 @@ export function Product() {
       <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-6 py-20 md:grid-cols-12">
         <div className="md:col-span-7">
           <div className="grid grid-cols-2 gap-4">
-            <div className="shadow-brut relative aspect-square overflow-hidden border-2 border-ink bg-paper">
-              <Image
-                src="/board-01.jpg"
-                alt="THE BOARD — складена дошка з фігурами на траві"
-                fill
-                sizes="(min-width: 768px) 25vw, 50vw"
-                className="object-cover"
-              />
-              <div className="absolute inset-0 flex items-end p-3">
-                <span className="caps bg-ink px-2 py-1 text-[10px] text-lilac">
-                  01 · TOP
+            {GALLERY.map((shot) => (
+              <div
+                key={shot.tag}
+                className={`shadow-brut relative aspect-square overflow-hidden border-2 border-ink ${shot.bg}`}
+              >
+                <Image
+                  src={shot.src}
+                  alt={shot.alt}
+                  fill
+                  sizes="(min-width: 1024px) 30vw, (min-width: 768px) 40vw, 50vw"
+                  className="object-cover"
+                />
+                <span className="caps absolute bottom-3 left-3 bg-ink px-2 py-1 text-[10px] text-lilac">
+                  {shot.tag}
                 </span>
               </div>
-            </div>
-            <div className="shadow-brut relative aspect-square border-2 border-ink bg-lilac">
-              <Placeholder tag="02 · PIECES" dark />
-            </div>
-            <div className="shadow-brut relative aspect-square border-2 border-ink bg-ink">
-              <Placeholder tag="03 · ANGLE" invert />
-            </div>
-            <div className="shadow-brut relative aspect-square border-2 border-ink bg-paper">
-              <Placeholder tag="04 · DETAIL" />
-            </div>
+            ))}
           </div>
         </div>
 
@@ -167,28 +188,3 @@ export function Product() {
   );
 }
 
-function Placeholder({
-  tag,
-  dark,
-  invert,
-}: {
-  tag: string;
-  dark?: boolean;
-  invert?: boolean;
-}) {
-  return (
-    <div className="absolute inset-0 flex items-end p-3">
-      <span
-        className={`caps px-2 py-1 text-[10px] ${
-          invert
-            ? "bg-lilac text-ink"
-            : dark
-              ? "bg-ink text-lilac"
-              : "bg-ink text-lilac"
-        }`}
-      >
-        {tag} · фото скоро
-      </span>
-    </div>
-  );
-}
