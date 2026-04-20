@@ -1,35 +1,27 @@
-import { BoardCTA } from "@/components/flat5/board-cta";
-import { Feeling } from "@/components/flat5/feeling";
-import { Footer } from "@/components/flat5/footer";
-import { Hero } from "@/components/flat5/hero";
-import { Nav } from "@/components/flat5/nav";
-import { Place } from "@/components/flat5/place";
-import { Secret } from "@/components/flat5/secret";
+import { About } from "@/components/landing/about";
+import { ChessClub } from "@/components/landing/chess-club";
+import { CTA } from "@/components/landing/cta";
+import { Footer } from "@/components/landing/footer";
+import { Hero } from "@/components/landing/hero";
 import { Marquee } from "@/components/landing/marquee";
+import { Nav } from "@/components/landing/nav";
+import { Product } from "@/components/landing/product";
 
 export default function Home() {
   return (
     <>
       <Nav />
-      <Marquee
-        items={[
-          "FLAT5",
-          "ПЛОЩА РИНОК 39",
-          "БЕЗ ВИВІСКИ",
-          "НАТИСНИ 5",
-          "ЛЬВІВ",
-        ]}
-      />
+      <Marquee />
       <main>
         <Hero />
+        <About />
         <Marquee
-          items={["МІСЦЕ СВОЇХ", "ТИХО", "ЗАТИШНО", "FLAT·5", "UA"]}
+          items={["DROP·001", "55/55", "UA MADE", "3D·PRINT", "FUTURA"]}
           variant="lilac"
         />
-        <Place />
-        <Secret />
-        <Feeling />
-        <BoardCTA />
+        <Product />
+        <CTA />
+        <ChessClub />
       </main>
       <Footer />
     </>

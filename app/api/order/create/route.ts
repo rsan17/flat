@@ -105,17 +105,18 @@ export async function POST(req: Request) {
     paid_at: null,
   };
 
-  // Persist
   if (supabaseConfigured()) {
     try {
       const sb = createServerSupabase();
       const { error } = await sb.from("orders").insert(record);
       if (error) throw error;
     } catch (err) {
-      // Fall back to local store in dev but surface the issue
-      saveOrderLocal(record);
       const message = err instanceof Error ? err.message : "Supabase error";
       console.error("Supabase insert failed:", message);
+      return NextResponse.json(
+        { ok: false, error: "Не вдалося зберегти замовлення. Спробуйте ще раз." },
+        { status: 500 },
+      );
     }
   } else {
     saveOrderLocal(record);

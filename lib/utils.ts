@@ -15,6 +15,10 @@ export function formatUAH(kopecks: number) {
 }
 
 export function generateOrderNumber() {
-  const n = Math.floor(1000 + Math.random() * 9000);
-  return `TB-001-${String(n).padStart(4, "0")}`;
+  const ts = Date.now().toString(36).slice(-5).toUpperCase();
+  const rnd = Math.floor(Math.random() * 36 ** 3)
+    .toString(36)
+    .padStart(3, "0")
+    .toUpperCase();
+  return `TB-001-${ts}${rnd}`;
 }

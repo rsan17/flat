@@ -7,11 +7,9 @@ import { updateOrderByInvoiceLocal } from "@/lib/order-store";
 import { sendAdminNotification, sendCustomerConfirmation } from "@/lib/email";
 import { findVariant } from "@/lib/products";
 import { formatUAH } from "@/lib/utils";
+import { verifyMonoSignature } from "@/lib/mono";
 
 export const runtime = "nodejs";
-
-// TODO: verify Mono signature using their public key
-// https://api.monobank.ua/docs/acquiring.html (X-Sign header + /api/merchant/pubkey)
 
 type MonoWebhookBody = {
   invoiceId: string;
@@ -23,7 +21,25 @@ type MonoWebhookBody = {
 };
 
 export async function POST(req: Request) {
-  const body = (await req.json()) as MonoWebhookBody;
+  const rawBody = await req.text();
+  const signature = req.headers.get("x-sign");
+
+  if (process.env.MONO_API_TOKEN) {
+    if (!signature) {
+      return NextResponse.json({ ok: false, error: "Missing X-Sign" }, { status: 401 });
+    }
+    const valid = await verifyMonoSignature(rawBody, signature);
+    if (!valid) {
+      return NextResponse.json({ ok: false, error: "Invalid signature" }, { status: 401 });
+    }
+  }
+
+  let body: MonoWebhookBody;
+  try {
+    body = JSON.parse(rawBody) as MonoWebhookBody;
+  } catch {
+    return NextResponse.json({ ok: false, error: "Invalid JSON" }, { status: 400 });
+  }
   if (!body?.invoiceId) {
     return NextResponse.json({ ok: false }, { status: 400 });
   }

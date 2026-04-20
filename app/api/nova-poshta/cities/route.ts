@@ -16,7 +16,7 @@ export async function GET(req: Request) {
     const message = err instanceof Error ? err.message : "NP error";
     return NextResponse.json(
       { cities: [], error: message },
-      { status: 200 },
+      { status: 502 },
     );
   }
 }

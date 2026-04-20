@@ -3,13 +3,20 @@ import { getWarehouses } from "@/lib/nova-poshta";
 
 export const runtime = "nodejs";
 
+const ALLOWED_TYPES = new Set(["warehouse", "postomat"]);
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const cityRef = url.searchParams.get("cityRef") || "";
   const q = url.searchParams.get("q") || "";
-  const type = (url.searchParams.get("type") || "warehouse") as
-    | "warehouse"
-    | "postomat";
+  const typeParam = url.searchParams.get("type") || "warehouse";
+  if (!ALLOWED_TYPES.has(typeParam)) {
+    return NextResponse.json(
+      { warehouses: [], error: "Invalid type" },
+      { status: 400 },
+    );
+  }
+  const type = typeParam as "warehouse" | "postomat";
   if (!cityRef) return NextResponse.json({ warehouses: [] });
 
   try {
@@ -23,7 +30,7 @@ export async function GET(req: Request) {
     const message = err instanceof Error ? err.message : "NP error";
     return NextResponse.json(
       { warehouses: [], error: message },
-      { status: 200 },
+      { status: 502 },
     );
   }
 }

@@ -59,10 +59,10 @@ export function CheckoutForm({
   const engraving = watch("engraving");
 
   function handlePhoneInput(e: React.ChangeEvent<HTMLInputElement>) {
-    let v = e.target.value.replace(/\D/g, "");
-    if (!v.startsWith("380")) v = "380" + v.replace(/^380/, "");
-    v = v.slice(0, 12);
-    setValue("phone", "+" + v, { shouldValidate: true });
+    let digits = e.target.value.replace(/\D/g, "");
+    if (digits.startsWith("380")) digits = digits.slice(3);
+    digits = digits.slice(-9);
+    setValue("phone", "+380" + digits, { shouldValidate: true });
   }
 
   async function onSubmit(data: CheckoutInput) {
@@ -264,7 +264,7 @@ export function CheckoutForm({
             />
             <span>
               Погоджуюсь з обробкою персональних даних та{" "}
-              <a href="#" className="underline">
+              <a href="/terms" target="_blank" rel="noopener" className="underline">
                 умовами сервісу
               </a>
               .

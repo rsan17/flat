@@ -36,9 +36,15 @@ export function NovaPoshtaPicker({
   const [loadingCities, setLoadingCities] = useState(false);
 
   const [warehouseQuery, setWarehouseQuery] = useState(warehouse);
+  const [warehouseQueryDebounced, setWarehouseQueryDebounced] = useState(warehouse);
   const [warehouses, setWarehouses] = useState<NPWarehouse[]>([]);
   const [warehouseOpen, setWarehouseOpen] = useState(false);
   const [loadingWh, setLoadingWh] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setWarehouseQueryDebounced(warehouseQuery), 300);
+    return () => clearTimeout(t);
+  }, [warehouseQuery]);
 
   const cityBoxRef = useRef<HTMLDivElement | null>(null);
   const whBoxRef = useRef<HTMLDivElement | null>(null);
@@ -95,7 +101,7 @@ export function NovaPoshtaPicker({
           cityRef,
           type: deliveryType,
         });
-        if (warehouseQuery) params.set("q", warehouseQuery);
+        if (warehouseQueryDebounced) params.set("q", warehouseQueryDebounced);
         const r = await fetch(`/api/nova-poshta/warehouses?${params}`);
         const data = (await r.json()) as { warehouses: NPWarehouse[] };
         if (!cancelled) setWarehouses(data.warehouses || []);
@@ -108,7 +114,7 @@ export function NovaPoshtaPicker({
     return () => {
       cancelled = true;
     };
-  }, [cityRef, deliveryType, warehouseQuery]);
+  }, [cityRef, deliveryType, warehouseQueryDebounced]);
 
   function pickCity(c: NPCity) {
     const label = `${c.Description}, ${c.AreaDescription} обл.`;
