@@ -49,7 +49,22 @@ export function Place() {
                 02 · RATUSHA
               </span>
             </div>
-            <Photo tag="03 · INTERIOR" bg="bg-lilac" />
+            <a
+              href="https://www.google.com/maps/place/площа+Ринок,+39,+Львів"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shadow-brut relative block aspect-square overflow-hidden border-2 border-ink bg-bone"
+            >
+              <iframe
+                src="https://maps.google.com/maps?q=площа+Ринок+39+Львів+Україна&hl=uk&z=17&output=embed"
+                className="pointer-events-none h-full w-full"
+                loading="lazy"
+                title="FLAT5 на карті"
+              />
+              <span className="caps absolute bottom-3 left-3 bg-ink px-2 py-1 text-[10px] text-lilac">
+                03 · MAP · відкрити ↗
+              </span>
+            </a>
             <Photo tag="04 · VIBE" bg="bg-paper" />
           </div>
         </div>
