@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Умови сервісу — THE BOARD",
+  title: "Умови сервісу — F5 BOARD",
 };
 
 export default function TermsPage() {

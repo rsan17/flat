@@ -14,12 +14,12 @@ export type Product = {
 
 export const BOARD_001: Product = {
   sku: "board-001",
-  title: "THE BOARD · 001",
+  title: "F5 BOARD · 001",
   tagline: "3D-друк, магнітна фіксація. Лімітована серія — 55 штук.",
   variants: [
     {
       sku: "standard",
-      name: "THE BOARD — 17 cm",
+      name: "F5 BOARD — 17 cm",
       description: "Компактний формат. 3D-друк, магнітна фіксація. 17×17 см.",
       priceKopecks: 79900,
     },

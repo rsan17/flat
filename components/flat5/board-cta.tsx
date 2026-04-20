@@ -5,7 +5,7 @@ export function BoardCTA() {
     <section className="grain relative border-b-2 border-ink bg-lilac text-ink">
       <div className="relative z-[2] mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-6 py-20 md:grid-cols-12 md:py-28">
         <div className="md:col-span-7">
-          <p className="caps text-xs">004 — THE·BOARD</p>
+          <p className="caps text-xs">004 — F5·BOARD</p>
           <h2 className="font-display mt-4 text-6xl leading-[0.9] md:text-8xl">
             У НАС Є
             <br />
@@ -14,7 +14,7 @@ export function BoardCTA() {
             </span>
           </h2>
           <p className="mt-6 max-w-xl text-lg md:text-xl">
-            THE·BOARD — обмежена серія шахових дошок ручної роботи. зроблено у
+            F5·BOARD — обмежена серія шахових дошок ручної роботи. зроблено у
             львові для тих, хто любить робити хід не як у всіх.
           </p>
         </div>

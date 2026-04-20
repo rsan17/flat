@@ -56,7 +56,7 @@ export function Hero() {
             />
             <Image
               src="/hero-board.png"
-              alt="THE BOARD — 3D-друкована шахова дошка F5 CHESS CLUB, вид збоку"
+              alt="F5 BOARD — 3D-друкована шахова дошка F5 CHESS CLUB, вид збоку"
               width={3024}
               height={1599}
               priority

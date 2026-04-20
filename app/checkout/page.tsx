@@ -31,7 +31,7 @@ export default async function CheckoutPage({
       <header className="sticky top-0 z-30 border-b-2 border-ink bg-paper/95 backdrop-blur">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-3">
           <Link href="/" className="font-display text-2xl">
-            THE·BOARD
+            F5·BOARD
           </Link>
           <Link href="/" className="caps text-xs hover:underline">
             ← повернутись

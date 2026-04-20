@@ -1,5 +1,5 @@
 export function Marquee({
-  items = ["HANDMADE", "LIMITED", "UKRAINE", "THE·BOARD", "CHESS", "DROP·001"],
+  items = ["HANDMADE", "LIMITED", "UKRAINE", "F5·BOARD", "CHESS", "DROP·001"],
   variant = "ink",
 }: {
   items?: string[];
