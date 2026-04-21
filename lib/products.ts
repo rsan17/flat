@@ -21,12 +21,12 @@ export const BOARD_001: Product = {
       sku: "standard",
       name: "F5 BOARD — 17 cm",
       description: "Компактний формат. 3D-друк, магнітна фіксація. 17×17 см.",
-      priceKopecks: 100,
+      priceKopecks: 79900,
     },
   ],
 };
 
-export const ENGRAVING_FEE_KOPECKS = 100;
+export const ENGRAVING_FEE_KOPECKS = 10000;
 
 export const PRODUCTS: Record<string, Product> = {
   [BOARD_001.sku]: BOARD_001,
