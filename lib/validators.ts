@@ -48,7 +48,7 @@ export const checkoutSchema = z.discriminatedUnion("deliveryType", [
 
 export type CheckoutInput = z.infer<typeof checkoutSchema>;
 
-export const PICKUP_ADDRESS = "Львів, вул. Шевченка 1 (майстерня)";
+export const PICKUP_ADDRESS = "Львів, площа Ринок 39";
 
 export const clubJoinSchema = z.object({
   fullName: z.string().trim().min(2, "Вкажіть ім'я та прізвище").max(80),

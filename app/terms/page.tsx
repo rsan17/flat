@@ -15,7 +15,7 @@ export default function TermsPage() {
         <section>
           <h2 className="caps text-sm opacity-70">1 · продавець</h2>
           <p>
-            ФОП [ПІБ], ЄДРПОУ [номер]. Адреса: Львів, вул. Шевченка 1.
+            ФОП [ПІБ], ЄДРПОУ [номер]. Адреса: Львів, площа Ринок 39.
             Email: [контакт]. Telegram: [@handle].
           </p>
         </section>
