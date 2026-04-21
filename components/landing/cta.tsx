@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { TrackedLink } from "@/components/analytics/tracked-link";
 
 export function CTA() {
   return (
@@ -36,9 +36,14 @@ export function CTA() {
           <div className="font-display text-4xl md:text-6xl">
             ГОТОВІ РОБИТИ ХІД?
           </div>
-          <Link href="/checkout?product=board-001&variant=standard" className="btn btn-lilac">
+          <TrackedLink
+            event="cta_click"
+            location="cta_section"
+            href="/checkout?product=board-001&variant=standard"
+            className="btn btn-lilac"
+          >
             замовити
-          </Link>
+          </TrackedLink>
         </div>
       </div>
     </section>

@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import { BOARD_001, ENGRAVING_FEE_KOPECKS } from "@/lib/products";
 import { formatUAH } from "@/lib/utils";
+import { trackEngravingToggle } from "@/lib/analytics";
+import { TrackedLink } from "@/components/analytics/tracked-link";
 
 const GALLERY = [
   {
@@ -139,7 +140,10 @@ export function Product() {
                 type="checkbox"
                 className="mt-1 h-4 w-4 border-2 border-ink accent-ink"
                 checked={engraving}
-                onChange={(e) => setEngraving(e.target.checked)}
+                onChange={(e) => {
+                  setEngraving(e.target.checked);
+                  trackEngravingToggle(e.target.checked);
+                }}
               />
               <div className="flex-1">
                 <div className="flex items-center justify-between gap-3">
@@ -180,9 +184,14 @@ export function Product() {
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
             {canSubmit ? (
-              <Link href={checkoutHref} className="btn btn-lilac">
+              <TrackedLink
+                event="cta_click"
+                location="product"
+                href={checkoutHref}
+                className="btn btn-lilac"
+              >
                 додати в замовлення · {formatUAH(totalKopecks)}
-              </Link>
+              </TrackedLink>
             ) : (
               <button
                 type="button"

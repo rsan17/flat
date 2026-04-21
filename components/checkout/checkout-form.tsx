@@ -6,7 +6,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { NovaPoshtaPicker } from "./nova-poshta-picker";
 import { OrderSummary } from "./order-summary";
 import { checkoutSchema, type CheckoutInput } from "@/lib/validators";
-import type { Product, ProductVariant } from "@/lib/products";
+import { ENGRAVING_FEE_KOPECKS, type Product, type ProductVariant } from "@/lib/products";
+import {
+  trackCheckoutSubmit,
+  trackDeliverySelect,
+  trackEngravingToggle,
+} from "@/lib/analytics";
 
 type Props = {
   product: Product;
@@ -93,6 +98,13 @@ export function CheckoutForm({
         setSubmitting(false);
         return;
       }
+      const baseTotal = variant.priceKopecks * data.quantity;
+      const totalKopecks = baseTotal + (data.engraving ? ENGRAVING_FEE_KOPECKS : 0);
+      trackCheckoutSubmit({
+        total_uah: Math.round(totalKopecks / 100),
+        has_engraving: Boolean(data.engraving),
+        delivery_type: data.deliveryType,
+      });
       if (json.pageUrl) {
         window.location.href = json.pageUrl;
       } else if (json.orderId) {
@@ -191,7 +203,9 @@ export function CheckoutForm({
                 <input
                   type="checkbox"
                   className="chk mt-1"
-                  {...register("engraving")}
+                  {...register("engraving", {
+                    onChange: (e) => trackEngravingToggle(e.target.checked),
+                  })}
                 />
                 <span className="flex-1">
                   <b className="caps text-xs">
@@ -224,7 +238,10 @@ export function CheckoutForm({
                   warehouse={watch("warehouse") ?? ""}
                   warehouseRef={watch("warehouseRef") ?? ""}
                   onChange={(patch) => {
-                    if (patch.deliveryType !== undefined) field.onChange(patch.deliveryType);
+                    if (patch.deliveryType !== undefined) {
+                      field.onChange(patch.deliveryType);
+                      trackDeliverySelect(patch.deliveryType);
+                    }
                     if (patch.city !== undefined) setValue("city", patch.city, { shouldValidate: true });
                     if (patch.cityRef !== undefined) setValue("cityRef", patch.cityRef, { shouldValidate: true });
                     if (patch.warehouse !== undefined) setValue("warehouse", patch.warehouse, { shouldValidate: true });

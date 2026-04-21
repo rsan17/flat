@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { TrackedLink } from "@/components/analytics/tracked-link";
 
 export function Nav() {
   return (
@@ -26,12 +27,14 @@ export function Nav() {
             клуб
           </a>
         </nav>
-        <Link
+        <TrackedLink
+          event="cta_click"
+          location="nav"
           href="/checkout?product=board-001&variant=standard"
           className="btn btn-lilac text-xs"
         >
           купити
-        </Link>
+        </TrackedLink>
       </div>
     </header>
   );

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CheckoutProgress } from "@/components/checkout/progress";
 import { CheckoutForm } from "@/components/checkout/checkout-form";
+import { CheckoutOpenTracker } from "@/components/analytics/checkout-open-tracker";
 import { Marquee } from "@/components/landing/marquee";
 import { findVariant, BOARD_001 } from "@/lib/products";
 
@@ -28,6 +29,7 @@ export default async function CheckoutPage({
 
   return (
     <>
+      <CheckoutOpenTracker />
       <header className="sticky top-0 z-30 border-b-2 border-ink bg-paper/95 backdrop-blur">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-3">
           <Link href="/" className="font-display text-2xl">
