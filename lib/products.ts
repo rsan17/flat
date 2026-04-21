@@ -26,7 +26,7 @@ export const BOARD_001: Product = {
   ],
 };
 
-export const ENGRAVING_FEE_KOPECKS = 10000;
+export const ENGRAVING_FEE_KOPECKS = 100;
 
 export const PRODUCTS: Record<string, Product> = {
   [BOARD_001.sku]: BOARD_001,
