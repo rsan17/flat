@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { TrackedLink } from "@/components/analytics/tracked-link";
 
 export function Hero() {
   return (
@@ -22,12 +22,14 @@ export function Hero() {
             </span>
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
-            <Link
+            <TrackedLink
+              event="cta_click"
+              location="hero"
               href="/checkout?product=board-001&variant=standard"
               className="btn btn-lilac"
             >
               купити · 799 ₴
-            </Link>
+            </TrackedLink>
             <a href="#product" className="btn btn-outline">
               дивитись дошку
             </a>

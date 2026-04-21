@@ -1,3 +1,5 @@
+import { TrackedLink } from "@/components/analytics/tracked-link";
+
 export function Footer() {
   return (
     <footer className="bg-paper">
@@ -9,25 +11,33 @@ export function Footer() {
           </p>
         </div>
         <div className="flex flex-wrap gap-6 text-xs caps">
-          <a
+          <TrackedLink
+            event="outbound_click"
+            target="instagram_flat5"
+            external
             href="https://www.instagram.com/flat5.lviv?igsh=MXY5cGc1cXB5aHZkeg=="
-            target="_blank"
-            rel="noopener noreferrer"
             className="hover:underline"
           >
             instagram
-          </a>
-          <a href="https://t.me/f5chess" className="hover:underline">
+          </TrackedLink>
+          <TrackedLink
+            event="outbound_click"
+            target="telegram_f5chess"
+            external
+            href="https://t.me/f5chess"
+            className="hover:underline"
+          >
             telegram
-          </a>
-          <a
+          </TrackedLink>
+          <TrackedLink
+            event="outbound_click"
+            target="instagram_17dots"
+            external
             href="https://www.instagram.com/17dots.agency?igsh=MWtyd2o1eDVnMzdwaw%3D%3D&utm_source=qr"
-            target="_blank"
-            rel="noopener noreferrer"
             className="hover:underline"
           >
             Created with love by 17
-          </a>
+          </TrackedLink>
         </div>
       </div>
     </footer>

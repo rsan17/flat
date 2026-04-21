@@ -8,6 +8,7 @@ import { sendAdminNotification, sendCustomerConfirmation } from "@/lib/email";
 import { findVariant } from "@/lib/products";
 import { formatUAH } from "@/lib/utils";
 import { verifyMonoSignature } from "@/lib/mono";
+import { track as serverTrack } from "@vercel/analytics/server";
 
 export const runtime = "nodejs";
 
@@ -132,6 +133,22 @@ export async function POST(req: Request) {
       ]);
     } catch (err) {
       console.error("Email send failed:", err);
+    }
+  }
+
+  if (updated && (newStatus === "paid" || newStatus === "cancelled")) {
+    try {
+      await serverTrack(
+        newStatus === "paid" ? "payment_success" : "payment_failed",
+        {
+          total_uah: Math.round(updated.total_amount / 100),
+          delivery_type: updated.np_delivery_type,
+          mono_status: body.status,
+        },
+        { headers: req.headers },
+      );
+    } catch (err) {
+      console.error("Analytics track failed:", err);
     }
   }
 
