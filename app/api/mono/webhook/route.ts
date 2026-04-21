@@ -5,6 +5,7 @@ import {
 } from "@/lib/supabase";
 import { updateOrderByInvoiceLocal } from "@/lib/order-store";
 import { sendAdminNotification, sendCustomerConfirmation } from "@/lib/email";
+import { sendPaymentStatusTelegramNotification } from "@/lib/telegram";
 import { findVariant } from "@/lib/products";
 import { formatUAH } from "@/lib/utils";
 import { verifyMonoSignature } from "@/lib/mono";
@@ -137,6 +138,19 @@ export async function POST(req: Request) {
   }
 
   if (updated && (newStatus === "paid" || newStatus === "cancelled")) {
+    const tg = await sendPaymentStatusTelegramNotification({
+      orderNumber: updated.order_number,
+      status: newStatus,
+      totalKopecks: updated.total_amount,
+      firstName: updated.customer_first_name,
+      lastName: updated.customer_last_name,
+      phone: updated.customer_phone,
+      monoStatus: body.status,
+    });
+    if (!tg.ok) {
+      console.error("Telegram payment notification failed:", tg.error);
+    }
+
     try {
       await serverTrack(
         newStatus === "paid" ? "payment_success" : "payment_failed",
