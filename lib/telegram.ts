@@ -48,7 +48,7 @@ export async function sendOrderTelegramNotification(
   }
 
   const lines: string[] = [];
-  lines.push(`🛒 <b>Нове замовлення ${escape(data.orderNumber)}</b>`);
+  lines.push(`⏳ <b>Нове замовлення ${escape(data.orderNumber)}</b> — очікує оплати`);
   lines.push("");
   lines.push(`<b>Клієнт:</b> ${escape(data.firstName)} ${escape(data.lastName)}`);
   lines.push(`<b>Телефон:</b> ${escape(data.phone)}`);
@@ -112,6 +112,77 @@ export async function sendOrderTelegramNotification(
   }
   if (errors.length > 0) {
     return { ok: true, error: `partial: ${errors.join("; ")}` };
+  }
+  return { ok: true };
+}
+
+type PaymentStatusData = {
+  orderNumber: string;
+  status: "paid" | "cancelled";
+  totalKopecks: number;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  monoStatus?: string;
+};
+
+export async function sendPaymentStatusTelegramNotification(
+  data: PaymentStatusData,
+): Promise<{ ok: boolean; error?: string }> {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatIdsRaw = process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatIdsRaw) {
+    return { ok: false, error: "TELEGRAM_BOT_TOKEN/CHAT_ID не налаштовані" };
+  }
+  const chatIds = chatIdsRaw.split(",").map((s) => s.trim()).filter(Boolean);
+  if (chatIds.length === 0) {
+    return { ok: false, error: "TELEGRAM_CHAT_ID порожній" };
+  }
+
+  const icon = data.status === "paid" ? "✅" : "❌";
+  const title =
+    data.status === "paid" ? "Оплачено" : "Оплату скасовано / не пройшла";
+
+  const lines: string[] = [];
+  lines.push(`${icon} <b>${title}: ${escape(data.orderNumber)}</b>`);
+  lines.push("");
+  lines.push(`<b>Клієнт:</b> ${escape(data.firstName)} ${escape(data.lastName)}`);
+  lines.push(`<b>Телефон:</b> ${escape(data.phone)}`);
+  lines.push(`<b>Сума:</b> ${formatUAH(data.totalKopecks)}`);
+  if (data.monoStatus && data.status === "cancelled") {
+    lines.push(`<b>Mono статус:</b> ${escape(data.monoStatus)}`);
+  }
+  const text = lines.join("\n");
+
+  const errors: string[] = [];
+  await Promise.all(
+    chatIds.map(async (chatId) => {
+      try {
+        const res = await fetch(
+          `https://api.telegram.org/bot${token}/sendMessage`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              chat_id: chatId,
+              text,
+              parse_mode: "HTML",
+              disable_web_page_preview: true,
+            }),
+          },
+        );
+        if (!res.ok) {
+          const bodyText = await res.text();
+          errors.push(`chat ${chatId}: ${res.status} ${bodyText}`);
+        }
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "unknown";
+        errors.push(`chat ${chatId}: ${message}`);
+      }
+    }),
+  );
+  if (errors.length === chatIds.length) {
+    return { ok: false, error: errors.join("; ") };
   }
   return { ok: true };
 }
