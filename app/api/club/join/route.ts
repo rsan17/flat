@@ -5,6 +5,7 @@ import {
   findClubMemberByPhoneLocal,
   saveClubMemberLocal,
 } from "@/lib/club-store";
+import { sendClubJoinTelegramNotification } from "@/lib/telegram";
 
 const FALLBACK_INVITE = "https://t.me/f5chess";
 
@@ -31,6 +32,17 @@ export async function POST(req: Request) {
       chess_handle: chessHandle?.trim() || null,
       created_at: new Date().toISOString(),
     });
+  }
+
+  const tg = await sendClubJoinTelegramNotification({
+    fullName,
+    phone,
+    nickname,
+    chessHandle: chessHandle?.trim() || null,
+    alreadyMember: Boolean(existing),
+  });
+  if (!tg.ok) {
+    console.error("Club Telegram notification failed:", tg.error);
   }
 
   const invite =
