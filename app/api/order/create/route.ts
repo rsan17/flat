@@ -4,30 +4,11 @@ import { checkoutSchema } from "@/lib/validators";
 import { findVariant, ENGRAVING_FEE_KOPECKS } from "@/lib/products";
 import { generateOrderNumber } from "@/lib/utils";
 import { createMonoInvoice } from "@/lib/mono";
-import {
-  createServerSupabase,
-  supabaseConfigured,
-} from "@/lib/supabase";
+import { getDb, dbConfigured, describeDbError } from "@/lib/db";
 import { saveOrderLocal, type OrderRecord } from "@/lib/order-store";
 import { sendOrderTelegramNotification } from "@/lib/telegram";
 
 export const runtime = "nodejs";
-
-function describeSupabaseError(err: unknown): string {
-  if (err instanceof Error) return err.message;
-  if (err && typeof err === "object") {
-    const e = err as { message?: unknown; code?: unknown; details?: unknown; hint?: unknown };
-    const parts = [e.message, e.code, e.details, e.hint]
-      .filter((v) => typeof v === "string" && v.length > 0);
-    if (parts.length) return parts.join(" · ");
-    try {
-      return JSON.stringify(err);
-    } catch {
-      return String(err);
-    }
-  }
-  return String(err);
-}
 
 export async function POST(req: Request) {
   let body: unknown;
@@ -99,13 +80,31 @@ export async function POST(req: Request) {
     paid_at: null,
   };
 
-  if (supabaseConfigured()) {
+  if (dbConfigured()) {
     try {
-      const sb = createServerSupabase();
-      const { error } = await sb.from("orders").insert(record);
-      if (error) throw error;
+      const sql = getDb();
+      await sql`
+        INSERT INTO orders (
+          id, order_number, status,
+          customer_first_name, customer_last_name, customer_phone, customer_email,
+          np_city, np_city_ref, np_warehouse, np_warehouse_ref, np_delivery_type,
+          club_member_name, engraving, engraving_fee,
+          product_sku, product_variant, quantity, total_amount,
+          mono_invoice_id, comment, created_at, paid_at
+        ) VALUES (
+          ${record.id}, ${record.order_number}, ${record.status},
+          ${record.customer_first_name}, ${record.customer_last_name},
+          ${record.customer_phone}, ${record.customer_email},
+          ${record.np_city}, ${record.np_city_ref}, ${record.np_warehouse},
+          ${record.np_warehouse_ref}, ${record.np_delivery_type},
+          ${record.club_member_name}, ${record.engraving}, ${record.engraving_fee},
+          ${record.product_sku}, ${record.product_variant}, ${record.quantity},
+          ${record.total_amount}, ${record.mono_invoice_id}, ${record.comment},
+          ${record.created_at}, ${record.paid_at}
+        )
+      `;
     } catch (err) {
-      console.error("Supabase insert failed:", describeSupabaseError(err));
+      console.error("DB insert failed:", describeDbError(err));
       return NextResponse.json(
         { ok: false, error: "Не вдалося зберегти замовлення. Спробуйте ще раз." },
         { status: 500 },
@@ -136,19 +135,12 @@ export async function POST(req: Request) {
       );
     }
 
-    if (supabaseConfigured()) {
+    if (dbConfigured()) {
       try {
-        const sb = createServerSupabase();
-        const { error } = await sb
-          .from("orders")
-          .update({ mono_invoice_id: invoiceId })
-          .eq("id", id);
-        if (error) throw error;
+        const sql = getDb();
+        await sql`UPDATE orders SET mono_invoice_id = ${invoiceId} WHERE id = ${id}`;
       } catch (err) {
-        console.error(
-          "Supabase invoice link failed:",
-          describeSupabaseError(err),
-        );
+        console.error("DB invoice link failed:", describeDbError(err));
       }
     } else {
       saveOrderLocal({ ...record, mono_invoice_id: invoiceId });

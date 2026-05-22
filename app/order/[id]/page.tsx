@@ -2,17 +2,17 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Marquee } from "@/components/landing/marquee";
 import { getOrderLocal } from "@/lib/order-store";
-import { supabaseConfigured, createServerSupabase } from "@/lib/supabase";
+import { getDb, dbConfigured } from "@/lib/db";
 import { formatUAH } from "@/lib/utils";
 import { findVariant } from "@/lib/products";
 import { PICKUP_ADDRESS } from "@/lib/validators";
 
 async function loadOrder(id: string) {
-  if (supabaseConfigured()) {
+  if (dbConfigured()) {
     try {
-      const sb = createServerSupabase();
-      const { data } = await sb.from("orders").select("*").eq("id", id).maybeSingle();
-      if (data) return data as ReturnType<typeof getOrderLocal>;
+      const sql = getDb();
+      const rows = await sql`SELECT * FROM orders WHERE id = ${id} LIMIT 1`;
+      if (rows.length) return rows[0] as ReturnType<typeof getOrderLocal>;
     } catch {
       // fall through
     }

@@ -7,7 +7,7 @@
 - **Next.js 15** (App Router, TypeScript, Turbopack)
 - **Tailwind CSS v4** (`@theme` у `app/globals.css`, без конфіг-файла)
 - **React Hook Form + Zod** (`discriminatedUnion` по `deliveryType`)
-- **Supabase** (Postgres, таблиця `orders`, service role key server-only)
+- **Neon Postgres** (`@neondatabase/serverless`, HTTP-driver, таблиця `orders`)
 - **Monobank Acquiring API** (`/merchant/invoice/create` + webhook)
 - **Nova Poshta API** (пошук міст і відділень через server-side proxy)
 - **Resend** (клієнту — підтвердження, адміну — сповіщення)
@@ -28,11 +28,11 @@ npm run dev
 | ----------- | ------------------------------------------------------------------------------------- |
 | порожні     | UI працює. Замовлення — в in-memory Map (тільки dev, `globalThis.__ORDERS__`).        |
 | `MONO_*`    | Створюється реальний інвойс, клієнта редиректить на `pageUrl` Mono для оплати.        |
-| `SUPABASE_*`| Замовлення пишуться в таблицю `orders`. В проді — обов'язково.                        |
+| `DATABASE_URL`| Замовлення пишуться в таблицю `orders` (Neon). В проді — обов'язково.               |
 | `RESEND_*`  | Після `status=success` у webhook летять листи клієнту й адміну.                       |
 | `NP_*`      | Реальний пошук міст/відділень. Без ключа ендпоінти повертають порожні списки.         |
 
-⚠️ **In-memory store несумісний із serverless (Vercel).** Без Supabase замовлення не виживе між запитами — success-сторінка поверне 404. Для продакшена Supabase обов'язково.
+⚠️ **In-memory store несумісний із serverless (Vercel).** Без `DATABASE_URL` замовлення не виживе між запитами — success-сторінка поверне 404. Для продакшена Neon обов'язково.
 
 ## Структура
 
@@ -40,7 +40,7 @@ npm run dev
 app/
   page.tsx                    лендинг (hero → about → product → CTA/FAQ → footer)
   checkout/page.tsx           чекаут (bound to ?product=&variant=)
-  order/[id]/page.tsx         сторінка успіху (server-rendered, читає Supabase/local)
+  order/[id]/page.tsx         сторінка успіху (server-rendered, читає Neon/local)
   api/
     nova-poshta/cities/       GET ?q= → пошук міст
     nova-poshta/warehouses/   GET ?cityRef=&type=warehouse|postomat
@@ -56,7 +56,7 @@ lib/
   nova-poshta    API обгортка (searchCities, getWarehouses)
   mono           createMonoInvoice (UAH = 980, amount у копійках)
   email          Resend шаблони (inline HTML, TODO → React Email)
-  supabase       createServerSupabase (service role, no session)
+  db             getDb (Neon HTTP-driver, DATABASE_URL)
   order-store    in-memory Map для dev
   utils          cn, formatUAH, generateOrderNumber
 supabase/migrations/
@@ -70,15 +70,15 @@ supabase/migrations/
    ```
    MONO_API_TOKEN            X-Token з https://web.monobank.ua/api
    NOVA_POSHTA_API_KEY       з developers.novaposhta.ua
-   NEXT_PUBLIC_SUPABASE_URL  з Supabase → Settings → API
-   SUPABASE_SERVICE_ROLE_KEY з Supabase → Settings → API (service_role, не anon!)
+   DATABASE_URL              pooled-connection string з Neon (Vercel → Storage → Neon інтегрує сам)
    RESEND_API_KEY            з resend.com/api-keys
    ADMIN_EMAIL               куди сипати сповіщення про замовлення
    NEXT_PUBLIC_SITE_URL      https://<your-domain>
    ```
-3. **Застосуй SQL міграцію** у Supabase → SQL editor:
+3. **Застосуй SQL міграції** у Neon → SQL editor:
    ```sql
    -- copy-paste supabase/migrations/0001_orders.sql
+   -- потім supabase/migrations/0002_engraving.sql
    ```
 4. **Налаштуй Resend-домен** — дефолтний from-address у `lib/email.ts` (`orders@theboard.local`) треба замінити на верифікований домен, інакше листи не підуть.
 5. **Deploy.** Після першої оплати перевір, що webhook від Mono прилетів у logs.
@@ -111,6 +111,6 @@ npm run dev
 - Admin v2 (список замовлень, ручний shipped + ТТН)
 - Автоматичне створення ТТН через НП
 - Chess Club — секція на лендингу замість дублю CTA
-- Мультитоварний каталог (`PRODUCTS` → Supabase)
+- Мультитоварний каталог (`PRODUCTS` → Neon)
 - i18n (EN версія)
 - React Email замість inline HTML

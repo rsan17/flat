@@ -7,14 +7,15 @@
 - Next.js 15 App Router · TypeScript · Tailwind v4 через `@theme` в `app/globals.css`
 - shadcn-стиль utility-компоненти в `components/*`, без radix поки
 - RHF + Zod `discriminatedUnion` по `deliveryType` у чекауті
-- Monobank Acquiring + Nova Poshta proxy + Supabase + Resend
+- Monobank Acquiring + Nova Poshta proxy + Neon Postgres + Resend
 - Деплой: Vercel (Next.js preset, `vercel.json` у репо), репо: https://github.com/rsan17/flat
 
 ## Конвенції
 
 - **i18n:** весь вміст українською. Без english-плейсхолдерів.
 - **API-ключі:** зовнішні API (Mono, NP, Resend) — тільки через route handlers у `app/api/**`. Жодних `NEXT_PUBLIC_` для секретів.
-- **`lib/order-store.ts`:** in-memory fallback ТІЛЬКИ для локального dev. У serverless-проді (Vercel) `globalThis.__ORDERS__` не виживає між запитами — обов'язково Supabase.
+- **`lib/order-store.ts`:** in-memory fallback ТІЛЬКИ для локального dev. У serverless-проді (Vercel) `globalThis.__ORDERS__` не виживає між запитами — обов'язково `DATABASE_URL` (Neon).
+- **`lib/db.ts`:** обгортка над `@neondatabase/serverless` (`neon(DATABASE_URL)`). HTTP-driver, без пулу, тегований template literal для SQL.
 - **`lib/products.ts`:** одне джерело цін і варіантів. SKU, `priceKopecks` (множимо на 100 в UAH). Не дублювати в UI.
 - **Ціни:** все в копійках (int), формат для UI — `formatUAH(kopecks)` у `lib/utils.ts`.
 - **Доставка:** `warehouse` | `postomat` | `pickup` (самовивіз зі Львова, адреса в `PICKUP_ADDRESS`).
@@ -27,7 +28,7 @@
 `createChatInviteLink` з `member_limit: 1` і `expire_date ≈ 24h`.
 Потрібні `F5_TG_BOT_TOKEN` + `F5_TG_CHAT_ID`, бот має бути адміном групи.
 
-### 8. F5 Chess Club · Supabase
+### 8. F5 Chess Club · Neon
 Замінити in-memory `lib/club-store.ts` на таблицю `club_members`
 (`id uuid, full_name, phone unique, nickname, chess_handle, birthday date,
 created_at`). Додати поле "день народження" у форму як опціональне.
@@ -40,7 +41,7 @@ phone. Звʼязок club_members ↔ orders по телефону.
 
 - Dev: `npm run dev` → http://localhost:3000
 - Без env — UI + in-memory замовлення
-- Vercel prod задеплоєно, але **НЕ робочий без Supabase** (див. нижче)
+- Vercel prod задеплоєно, але **НЕ робочий без `DATABASE_URL`** (Neon, див. нижче)
 
 ---
 
@@ -54,10 +55,9 @@ phone. Звʼязок club_members ↔ orders по телефону.
 `app/api/mono/webhook/route.ts:13` — TODO коментар, ніякої перевірки `X-Sign`. Атакувальник може POST-нути `{invoiceId, status: "success"}` і тригернути email "оплачено" + apm update. Потрібна перевірка через `/api/merchant/pubkey` + ECDSA verify.
 
 **C2. In-memory store ≠ serverless**
-`lib/order-store.ts` — `globalThis.__ORDERS__` не виживає між Vercel function invocations. Без Supabase: замовлення створюється → клієнт летить на `/order/[id]` → 404. На Vercel прод **непрацюючий без Supabase env-вар**.
+`lib/order-store.ts` — `globalThis.__ORDERS__` не виживає між Vercel function invocations. Без `DATABASE_URL`: замовлення створюється → клієнт летить на `/order/[id]` → 404. На Vercel прод **непрацюючий без `DATABASE_URL` env-вар**.
 
-**C3. Supabase insert failure → `ok: true`**
-`app/api/order/create/route.ts:95-108` — при помилці insert (duplicate key, network) лог у консоль, але клієнту повертаємо `ok: true`. Клієнт оплачує, webhook не знаходить order для update → статус висить `pending` назавжди.
+**C3. ~~Supabase insert failure → `ok: true`~~** — пофікшено разом з переходом на Neon. У `app/api/order/create/route.ts` запис у БД відбувається ДО створення Mono-інвойсу: якщо insert падає — клієнт бачить помилку, інвойс не створюється. Помилки Postgres логуються через `describeDbError`.
 
 ### High
 
@@ -78,8 +78,7 @@ phone. Звʼязок club_members ↔ orders по телефону.
 **M2. Warehouse input без debounce**
 `components/checkout/nova-poshta-picker.tsx:98-111` — місто має 300мс debounce, відділення — ні. Кожен keystroke → HTTP. Fix: обернути `warehouseQuery` у debounced state.
 
-**M3. RLS не увімкнено на `orders`**
-`supabase/migrations/0001_orders.sql` — працює через service_role, ок. Але defence-in-depth: `alter table orders enable row level security;` + deny-all policy, щоб anon key точно нічого не бачив.
+**M3. ~~RLS не увімкнено на `orders`~~** — більше не релевантно після переходу на Neon. До БД ходить тільки серверний код через `DATABASE_URL`, anon-роль не існує.
 
 **M4. Success-сторінка = публічна по UUID**
 `app/order/[id]/page.tsx` — UUID v4 неможливо вгадати, але URL містить PII (phone, email, адреса). Якщо лінк витече (share, копія) — витік. Fix: signed cookie або короткий токен у URL.
@@ -112,7 +111,7 @@ phone. Звʼязок club_members ↔ orders по телефону.
 ### 2. Admin v2
 - Список замовлень із фільтрами (status, date range, search по order_number/phone)
 - Ручне проставляння статусу `shipped` + введення ТТН
-- Auth через Supabase (magic link на `ADMIN_EMAIL`)
+- Auth — окремий простий механізм (наприклад magic link через Resend, або basic auth по `ADMIN_EMAIL`)
 
 ### 3. Mono webhook signature (= C1)
 Перевірка `X-Sign` через публічний ключ з `GET /api/merchant/pubkey`. ECDSA P-256 + SHA-256.
@@ -121,7 +120,7 @@ phone. Звʼязок club_members ↔ orders по телефону.
 Винести inline HTML з `lib/email.ts` у React Email компоненти. Зараз шаблони копіпастяться.
 
 ### 5. Inventory (12/12 хардкод)
-Після Supabase — тягнути `stock_remaining` з БД, блокувати "купити" при 0. Декремент у транзакції при створенні `paid` ордера.
+Після Neon — тягнути `stock_remaining` з БД, блокувати "купити" при 0. Декремент у транзакції при створенні `paid` ордера.
 
 ### 6. Club member discount
 `clubMemberName` заповнено → `is_club_member=true` у записі. Пізніше — знижка за промокодом або перевіркою по whitelist.
@@ -130,7 +129,7 @@ phone. Звʼязок club_members ↔ orders по телефону.
 Після `shipped` у адмінці → виклик `InternetDocument.save` у NP API → зберігати `ttn` поле.
 
 ### 8. Мультитоварний каталог
-`PRODUCTS` зараз Record у коді. Перенести в Supabase (products, variants, inventory).
+`PRODUCTS` зараз Record у коді. Перенести в Neon (products, variants, inventory).
 
 ### 9. i18n (EN)
 `next-intl` або роутинг-based. UA залишається дефолтом.

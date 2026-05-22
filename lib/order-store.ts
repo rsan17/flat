@@ -1,5 +1,5 @@
-// In-memory order store for local dev when Supabase is not configured.
-// Replaced by Supabase queries in production (see /lib/supabase.ts).
+// In-memory order store for local dev when DATABASE_URL is not configured.
+// Replaced by Neon Postgres queries in production (see /lib/db.ts).
 
 export type OrderRecord = {
   id: string;

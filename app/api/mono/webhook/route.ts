@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server";
-import {
-  createServerSupabase,
-  supabaseConfigured,
-} from "@/lib/supabase";
+import { getDb, dbConfigured, describeDbError } from "@/lib/db";
 import { updateOrderByInvoiceLocal } from "@/lib/order-store";
 import { sendAdminNotification, sendCustomerConfirmation } from "@/lib/email";
 import { sendPaymentStatusTelegramNotification } from "@/lib/telegram";
@@ -74,18 +71,22 @@ export async function POST(req: Request) {
       }
     | null = null;
 
-  if (supabaseConfigured()) {
+  if (dbConfigured()) {
     try {
-      const sb = createServerSupabase();
-      const { data } = await sb
-        .from("orders")
-        .update({ status: newStatus, paid_at: paidAt })
-        .eq("mono_invoice_id", body.invoiceId)
-        .select()
-        .maybeSingle();
-      if (data) updated = data as typeof updated;
+      const sql = getDb();
+      const rows = await sql`
+        UPDATE orders
+        SET status = ${newStatus}, paid_at = ${paidAt}
+        WHERE mono_invoice_id = ${body.invoiceId}
+        RETURNING
+          order_number, customer_first_name, customer_last_name,
+          customer_phone, customer_email, np_city, np_warehouse,
+          np_delivery_type, club_member_name, product_sku,
+          product_variant, quantity, total_amount, comment
+      `;
+      if (rows.length) updated = rows[0] as unknown as typeof updated;
     } catch (err) {
-      console.error("Supabase webhook update failed:", err);
+      console.error("DB webhook update failed:", describeDbError(err));
     }
   } else {
     const local = updateOrderByInvoiceLocal(body.invoiceId, {
