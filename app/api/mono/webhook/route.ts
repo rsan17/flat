@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server";
-import {
-  createServerSupabase,
-  supabaseConfigured,
-} from "@/lib/supabase";
+import { dbConfigured, updateOrderByInvoice } from "@/lib/db";
 import { updateOrderByInvoiceLocal } from "@/lib/order-store";
 import { sendAdminNotification, sendCustomerConfirmation } from "@/lib/email";
 import { sendPaymentStatusTelegramNotification } from "@/lib/telegram";
@@ -74,18 +71,15 @@ export async function POST(req: Request) {
       }
     | null = null;
 
-  if (supabaseConfigured()) {
+  if (dbConfigured()) {
     try {
-      const sb = createServerSupabase();
-      const { data } = await sb
-        .from("orders")
-        .update({ status: newStatus, paid_at: paidAt })
-        .eq("mono_invoice_id", body.invoiceId)
-        .select()
-        .maybeSingle();
-      if (data) updated = data as typeof updated;
+      const row = await updateOrderByInvoice(body.invoiceId, {
+        status: newStatus,
+        paid_at: paidAt,
+      });
+      if (row) updated = row;
     } catch (err) {
-      console.error("Supabase webhook update failed:", err);
+      console.error("Neon webhook update failed:", err);
     }
   } else {
     const local = updateOrderByInvoiceLocal(body.invoiceId, {

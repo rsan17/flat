@@ -4,10 +4,7 @@ import { checkoutSchema } from "@/lib/validators";
 import { findVariant, ENGRAVING_FEE_KOPECKS } from "@/lib/products";
 import { generateOrderNumber } from "@/lib/utils";
 import { createMonoInvoice } from "@/lib/mono";
-import {
-  createServerSupabase,
-  supabaseConfigured,
-} from "@/lib/supabase";
+import { dbConfigured, insertOrder } from "@/lib/db";
 import { saveOrderLocal, type OrderRecord } from "@/lib/order-store";
 import { sendOrderTelegramNotification } from "@/lib/telegram";
 
@@ -106,14 +103,12 @@ export async function POST(req: Request) {
     paid_at: null,
   };
 
-  if (supabaseConfigured()) {
+  if (dbConfigured()) {
     try {
-      const sb = createServerSupabase();
-      const { error } = await sb.from("orders").insert(record);
-      if (error) throw error;
+      await insertOrder(record);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Supabase error";
-      console.error("Supabase insert failed:", message);
+      const message = err instanceof Error ? err.message : "DB error";
+      console.error("Neon insert failed:", message);
       return NextResponse.json(
         { ok: false, error: "Не вдалося зберегти замовлення. Спробуйте ще раз." },
         { status: 500 },
