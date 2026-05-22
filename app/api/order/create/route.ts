@@ -13,6 +13,22 @@ import { sendOrderTelegramNotification } from "@/lib/telegram";
 
 export const runtime = "nodejs";
 
+function describeSupabaseError(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  if (err && typeof err === "object") {
+    const e = err as { message?: unknown; code?: unknown; details?: unknown; hint?: unknown };
+    const parts = [e.message, e.code, e.details, e.hint]
+      .filter((v) => typeof v === "string" && v.length > 0);
+    if (parts.length) return parts.join(" · ");
+    try {
+      return JSON.stringify(err);
+    } catch {
+      return String(err);
+    }
+  }
+  return String(err);
+}
+
 export async function POST(req: Request) {
   let body: unknown;
   try {
@@ -56,29 +72,6 @@ export async function POST(req: Request) {
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || new URL(req.url).origin;
 
-  // Attempt to create Mono invoice (optional in dev)
-  let invoiceId: string | null = null;
-  let pageUrl: string | null = null;
-  if (process.env.MONO_API_TOKEN) {
-    try {
-      const mono = await createMonoInvoice({
-        amount: total,
-        reference: orderNumber,
-        destination: `Оплата замовлення ${orderNumber} — ${found.product.title}`,
-        redirectUrl: `${siteUrl}/order/${id}`,
-        webHookUrl: `${siteUrl}/api/mono/webhook`,
-      });
-      invoiceId = mono.invoiceId;
-      pageUrl = mono.pageUrl;
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Mono error";
-      return NextResponse.json(
-        { ok: false, error: `Не вдалося створити платіж: ${message}` },
-        { status: 502 },
-      );
-    }
-  }
-
   const isPickup = data.deliveryType === "pickup";
   const record: OrderRecord = {
     id,
@@ -100,7 +93,7 @@ export async function POST(req: Request) {
     product_variant: data.variantSku,
     quantity: data.quantity,
     total_amount: total,
-    mono_invoice_id: invoiceId,
+    mono_invoice_id: null,
     comment: data.comment || null,
     created_at: new Date().toISOString(),
     paid_at: null,
@@ -112,8 +105,7 @@ export async function POST(req: Request) {
       const { error } = await sb.from("orders").insert(record);
       if (error) throw error;
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Supabase error";
-      console.error("Supabase insert failed:", message);
+      console.error("Supabase insert failed:", describeSupabaseError(err));
       return NextResponse.json(
         { ok: false, error: "Не вдалося зберегти замовлення. Спробуйте ще раз." },
         { status: 500 },
@@ -121,6 +113,46 @@ export async function POST(req: Request) {
     }
   } else {
     saveOrderLocal(record);
+  }
+
+  let invoiceId: string | null = null;
+  let pageUrl: string | null = null;
+  if (process.env.MONO_API_TOKEN) {
+    try {
+      const mono = await createMonoInvoice({
+        amount: total,
+        reference: orderNumber,
+        destination: `Оплата замовлення ${orderNumber} — ${found.product.title}`,
+        redirectUrl: `${siteUrl}/order/${id}`,
+        webHookUrl: `${siteUrl}/api/mono/webhook`,
+      });
+      invoiceId = mono.invoiceId;
+      pageUrl = mono.pageUrl;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Mono error";
+      return NextResponse.json(
+        { ok: false, error: `Не вдалося створити платіж: ${message}` },
+        { status: 502 },
+      );
+    }
+
+    if (supabaseConfigured()) {
+      try {
+        const sb = createServerSupabase();
+        const { error } = await sb
+          .from("orders")
+          .update({ mono_invoice_id: invoiceId })
+          .eq("id", id);
+        if (error) throw error;
+      } catch (err) {
+        console.error(
+          "Supabase invoice link failed:",
+          describeSupabaseError(err),
+        );
+      }
+    } else {
+      saveOrderLocal({ ...record, mono_invoice_id: invoiceId });
+    }
   }
 
   const tg = await sendOrderTelegramNotification({
