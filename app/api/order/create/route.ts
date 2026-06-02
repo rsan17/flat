@@ -46,6 +46,13 @@ export async function POST(req: Request) {
   }
 
   const engraving = data.engraving === true;
+  // Гравіювання — тільки великими літерами. Нормалізуємо на випадок прямого API-виклику.
+  const clubMemberNameRaw = data.clubMemberName?.trim() || "";
+  const clubMemberName = clubMemberNameRaw
+    ? engraving
+      ? clubMemberNameRaw.toUpperCase()
+      : clubMemberNameRaw
+    : null;
   const engravingFee = engraving ? ENGRAVING_FEE_KOPECKS : 0;
   const total = found.variant.priceKopecks * data.quantity + engravingFee;
   const id = randomUUID();
@@ -90,7 +97,7 @@ export async function POST(req: Request) {
     np_warehouse: isPickup ? "" : data.warehouse ?? "",
     np_warehouse_ref: isPickup ? "" : data.warehouseRef ?? "",
     np_delivery_type: data.deliveryType,
-    club_member_name: data.clubMemberName?.trim() || null,
+    club_member_name: clubMemberName,
     engraving,
     engraving_fee: engravingFee,
     product_sku: data.productSku,

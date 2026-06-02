@@ -163,15 +163,15 @@ export function Product() {
             {engraving && (
               <div className="mt-4">
                 <label className="caps block text-[11px] opacity-70">
-                  нікнейм для гравіювання · макс. 14 символів
+                  нікнейм для гравіювання · великими літерами · макс. 14
                 </label>
                 <input
                   type="text"
-                  className="input mt-1"
-                  placeholder="Напр. ilovehikaru"
+                  className="input mt-1 uppercase placeholder:normal-case"
+                  placeholder="Напр. ILOVEHIKARU"
                   maxLength={14}
                   value={nickname}
-                  onChange={(e) => setNickname(e.target.value)}
+                  onChange={(e) => setNickname(e.target.value.toUpperCase())}
                 />
                 {!canSubmit && (
                   <p className="caps mt-1 text-[11px] text-red-600">

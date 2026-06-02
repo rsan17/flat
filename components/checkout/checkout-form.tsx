@@ -35,6 +35,7 @@ export function CheckoutForm({
     control,
     watch,
     setValue,
+    getValues,
     setError,
     setFocus,
     formState: { errors },
@@ -187,9 +188,14 @@ export function CheckoutForm({
                 </span>
               </label>
               <input
-                className="input"
+                className={`input ${engraving ? "uppercase placeholder:normal-case" : ""}`}
                 placeholder="Якщо ви учасник F5 Chess Club"
-                {...register("clubMemberName")}
+                {...register("clubMemberName", {
+                  onChange: (e) => {
+                    if (getValues("engraving"))
+                      setValue("clubMemberName", e.target.value.toUpperCase());
+                  },
+                })}
                 aria-invalid={!!errors.clubMemberName}
               />
               {errors.clubMemberName && (
@@ -204,7 +210,15 @@ export function CheckoutForm({
                   type="checkbox"
                   className="chk mt-1"
                   {...register("engraving", {
-                    onChange: (e) => trackEngravingToggle(e.target.checked),
+                    onChange: (e) => {
+                      trackEngravingToggle(e.target.checked);
+                      if (e.target.checked) {
+                        setValue(
+                          "clubMemberName",
+                          (getValues("clubMemberName") ?? "").toUpperCase(),
+                        );
+                      }
+                    },
                   })}
                 />
                 <span className="flex-1">
