@@ -17,7 +17,7 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article className="product-card">
       <Link
-        href={`/shop/${product.sku}`}
+        href={`/product/${product.sku}`}
         className="group block focus:outline-none"
       >
         <div className="relative aspect-square border-b-2 border-ink">

@@ -39,7 +39,7 @@ export type EngravingOption = {
 };
 
 export type Product = {
-  /** Він же slug у /shop/[slug] */
+  /** Він же slug у /product/[slug] */
   sku: string;
   title: string;
   tagline: string;

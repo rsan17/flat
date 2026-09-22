@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/site/footer";
 import { ProductShot } from "@/components/shop/product-shot";
 import { ProductGrid } from "@/components/shop/product-grid";
 import { BuyBox } from "@/components/shop/buy-box";
+import { ShopFaq } from "@/components/shop/shop-faq";
 import { getProduct, PRODUCT_LIST } from "@/lib/products";
 import { PLACE } from "@/lib/place";
 
@@ -51,8 +52,8 @@ export default async function ProductPage({ params }: { params: Params }) {
           className="border-b-2 border-ink bg-paper"
         >
           <div className="mx-auto flex max-w-[1400px] items-center gap-2 px-6 py-3 text-xs">
-            <Link href="/shop" className="caps hover:underline">
-              магазин
+            <Link href="/" className="caps hover:underline">
+              flat5
             </Link>
             <span aria-hidden className="opacity-40">
               /
@@ -154,9 +155,9 @@ export default async function ProductPage({ params }: { params: Params }) {
             <div className="mx-auto max-w-[1400px] px-6 py-16">
               <div className="mb-8 flex items-end justify-between gap-4 border-b-2 border-ink pb-4">
                 <h2 className="font-display text-4xl md:text-5xl">
-                  ЩЕ В МАГАЗИНІ
+                  ЩЕ В НАС Є
                 </h2>
-                <Link href="/shop" className="caps text-xs hover:underline">
+                <Link href="/#board-001" className="caps text-xs hover:underline">
                   усі товари →
                 </Link>
               </div>
@@ -164,6 +165,8 @@ export default async function ProductPage({ params }: { params: Params }) {
             </div>
           </section>
         )}
+
+        <ShopFaq />
       </main>
 
       <SiteFooter />

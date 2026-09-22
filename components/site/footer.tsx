@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { TrackedLink } from "@/components/analytics/tracked-link";
+import { Hand } from "@/components/brand/marks";
 import { PLACE } from "@/lib/place";
 
 export function SiteFooter() {
@@ -8,10 +9,15 @@ export function SiteFooter() {
       <div className="mx-auto max-w-[1400px] px-6 py-14">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
           <div className="md:col-span-5">
-            <div className="font-display text-6xl md:text-8xl">FLAT5</div>
-            <p className="font-hand mt-3 text-2xl text-lilac">
-              дай п&apos;ять і ще одну каву
-            </p>
+            <div className="flex items-start gap-5">
+              <div>
+                <div className="font-display text-6xl md:text-8xl">FLAT5</div>
+                <p className="font-hand mt-3 text-2xl text-lilac">
+                  дай п&apos;ять і ще одну каву
+                </p>
+              </div>
+              <Hand className="mt-1 w-16 shrink-0 -rotate-6 md:w-20" />
+            </div>
           </div>
 
           <div className="md:col-span-3">
@@ -45,8 +51,8 @@ export function SiteFooter() {
             <p className="caps text-xs text-lilac">сторінки</p>
             <ul className="mt-3 grid gap-2 text-sm">
               <li>
-                <Link href="/shop" className="hover:underline">
-                  магазин
+                <Link href="/#board-001" className="hover:underline">
+                  товари
                 </Link>
               </li>
               <li>

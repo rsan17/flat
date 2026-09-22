@@ -53,8 +53,8 @@ export default function Flat5Page() {
                   стікери з лодонькою. Усе, що можна винести за двері.
                 </p>
               </div>
-              <Link href="/shop" className="btn btn-paper">
-                у магазин
+              <Link href="/#board-001" className="btn btn-paper">
+                до товарів
               </Link>
             </div>
           </div>

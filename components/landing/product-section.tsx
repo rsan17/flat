@@ -23,7 +23,7 @@ export function ProductSection({
   const multiPrice =
     new Set(product.variants.map((v) => v.priceKopecks)).size > 1;
   const purchasable = product.status === "available";
-  const href = `/shop/${product.sku}`;
+  const href = `/product/${product.sku}`;
 
   return (
     <section

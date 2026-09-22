@@ -27,7 +27,7 @@ export default async function CheckoutPage({
   };
   // Товар «скоро» / «розібрали» не можна оформити — назад на сторінку товару.
   if (!isPurchasable(hit.product)) {
-    redirect(`/shop/${hit.product.sku}`);
+    redirect(`/product/${hit.product.sku}`);
   }
   const initialEngraving = sp.engraving === "1" || sp.engraving === "true";
   const initialNickname = (sp.nickname ?? "").slice(0, 80);
@@ -41,7 +41,7 @@ export default async function CheckoutPage({
             FLAT5
           </Link>
           <Link
-            href={`/shop/${hit.product.sku}`}
+            href={`/product/${hit.product.sku}`}
             className="caps text-xs hover:underline"
           >
             ← до товару

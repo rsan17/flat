@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 const LINKS = [
-  { href: "/shop", label: "магазин" },
+  { href: "/#board-001", label: "товари" },
   { href: "/flat5", label: "заклад" },
   { href: "/#club", label: "клуб" },
 ];
@@ -32,7 +32,7 @@ export function SiteNav() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link href="/shop" className="btn btn-lilac btn-sm hidden sm:inline-flex">
+          <Link href="/product/board-001" className="btn btn-lilac btn-sm hidden sm:inline-flex">
             купити
           </Link>
           <button
@@ -67,7 +67,7 @@ export function SiteNav() {
             ))}
             <li>
               <Link
-                href="/shop"
+                href="/product/board-001"
                 className="btn btn-lilac mt-2 w-full"
                 onClick={() => setOpen(false)}
               >

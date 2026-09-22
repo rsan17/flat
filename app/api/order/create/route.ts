@@ -148,14 +148,22 @@ export async function POST(req: Request) {
     deliveryType: data.deliveryType,
     city: isPickup ? "" : data.city ?? "",
     warehouse: isPickup ? "" : data.warehouse ?? "",
-    productTitle: found.product.title,
-    variantName: found.variant.name,
-    quantity: data.quantity,
+    // Поки одна позиція, але формат уже готовий до кошика.
+    items: [
+      {
+        productSku: found.product.sku,
+        productTitle: found.product.title,
+        variantSku: found.variant.sku,
+        variantName: found.variant.name,
+        quantity: data.quantity,
+        unitPriceKopecks: found.variant.priceKopecks,
+        engravingText: engraving ? clubMemberName : null,
+        engravingFeeKopecks: engravingFee,
+      },
+    ],
     totalKopecks: total,
-    engraving,
-    engravingFee,
-    clubMemberName: data.clubMemberName?.trim() || null,
     comment: data.comment || null,
+    orderUrl: `${siteUrl}/order/${id}`,
   });
   if (!tg.ok) {
     console.error("Telegram notification failed:", tg.error);

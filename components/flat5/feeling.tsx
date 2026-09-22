@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Sofa } from "@/components/brand/marks";
 
 export function Feeling() {
   return (
@@ -19,16 +20,18 @@ export function Feeling() {
           </div>
         </div>
         <div className="md:col-span-6 md:col-start-7 md:self-center">
-          <p className="caps text-xs">003 — ВІДЧУТТЯ</p>
+          <p className="caps text-xs">004 — ВІДЧУТТЯ</p>
           <h2 className="font-display mt-4 text-5xl leading-[0.9] md:text-7xl">
             FLAT5 — <br />
-            <span className="inline-block bg-lilac px-3 py-1">НЕ ПРОСТО</span>
+            <span className="hl">НЕ ПРОСТО</span>
             <br />
             МІСЦЕ.
           </h2>
           <p className="mt-8 max-w-lg text-lg md:text-xl">
-            це відчуття, в яке хочеться повертатись.
+            Це відчуття, в яке хочеться повертатись. Простір, куди приходять як
+            додому: заходиш — і розчиняєшся в затишку з чашкою кави.
           </p>
+          <Sofa className="mt-8 w-56 md:w-72" />
         </div>
       </div>
     </section>

@@ -63,6 +63,8 @@ export async function POST(req: Request) {
         np_warehouse: string;
         np_delivery_type: "warehouse" | "postomat" | "pickup";
         club_member_name: string | null;
+        engraving: boolean;
+        engraving_fee: number;
         product_sku: string;
         product_variant: string;
         quantity: number;
@@ -132,6 +134,8 @@ export async function POST(req: Request) {
   }
 
   if (updated && (newStatus === "paid" || newStatus === "cancelled")) {
+    // Замовлення поки однопозиційне — але в бота йде список, як і при створенні.
+    const paidHit = findVariant(updated.product_sku, updated.product_variant);
     const tg = await sendPaymentStatusTelegramNotification({
       orderNumber: updated.order_number,
       status: newStatus,
@@ -140,6 +144,18 @@ export async function POST(req: Request) {
       lastName: updated.customer_last_name,
       phone: updated.customer_phone,
       monoStatus: body.status,
+      items: [
+        {
+          productSku: updated.product_sku,
+          productTitle: paidHit?.product.title ?? updated.product_sku,
+          variantSku: updated.product_variant,
+          variantName: paidHit?.variant.name ?? updated.product_variant,
+          quantity: updated.quantity,
+          unitPriceKopecks: paidHit?.variant.priceKopecks ?? 0,
+          engravingText: updated.engraving ? updated.club_member_name : null,
+          engravingFeeKopecks: updated.engraving_fee,
+        },
+      ],
     });
     if (!tg.ok) {
       console.error("Telegram payment notification failed:", tg.error);
