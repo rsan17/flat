@@ -165,72 +165,8 @@ export const TEE_001: Product = {
   badges: ["скоро", "мерч"],
 };
 
-export const STICKERS_001: Product = {
-  sku: "stickers-001",
-  title: "СТІКЕРПАК F5",
-  tagline: "Лодонька, гірлянда, F5. Наклей, куди дотягнешся.",
-  category: "accessory",
-  status: "soon",
-  cardDescription:
-    "Набір фірмових стікерів: лодонька «дай п'ять», вигнутий FLAT5 і круглі F5 на 5 і 3 см.",
-  description: [
-    "Лодонька — це «дай п'ять і ще одну каву». Жест, з якого починається більшість вечорів у FLAT5.",
-    "У наборі: лодонька, вигнутий логотип за формою гірлянди і круглі F5 двох розмірів — 5 і 3 см. Вінілові, стійкі до води.",
-  ],
-  media: [],
-  variantLabel: "набір",
-  variants: [
-    {
-      sku: "pack",
-      name: "Стікерпак — 6 шт",
-      description: "Лодонька, гірлянда-логотип, 2× F5 5 см, 2× F5 3 см.",
-      priceKopecks: 14900,
-    },
-  ],
-  specs: [
-    { label: "склад", value: "6 стікерів" },
-    { label: "розміри", value: "5 см і 3 см" },
-    { label: "матеріал", value: "вініл, стійкий до води" },
-  ],
-  badges: ["скоро", "мерч"],
-};
-
-export const GIFTBOX_001: Product = {
-  sku: "giftbox-001",
-  title: "БОКС «ДАЙ П'ЯТЬ»",
-  tagline: "Кава, кукіс і стікери в коробці з написом всередині.",
-  category: "gift",
-  status: "soon",
-  cardDescription:
-    "Подарунковий бокс: зерно від FLAT5, кукіс, стікерпак. На дні коробки — «don't share, we won't tell».",
-  description: [
-    "Коробка, яку приємно відкривати: всередині зерно, з якого ми варимо каву, свіжий кукіс і стікерпак.",
-    "На дні — напис «don't share, we won't tell». Можна не ділитись, ми нікому не скажемо.",
-  ],
-  media: [],
-  variantLabel: "комплект",
-  variants: [
-    {
-      sku: "standard",
-      name: "Бокс «Дай п'ять»",
-      description: "Зерно 250 г, кукіс, стікерпак.",
-      priceKopecks: 59900,
-    },
-  ],
-  specs: [
-    { label: "у боксі", value: "кава 250 г · кукіс · стікерпак" },
-    { label: "пакування", value: "фірмова коробка FLAT5" },
-  ],
-  badges: ["скоро", "подарунок"],
-};
-
 /** Порядок тут = порядок у каталозі */
-export const PRODUCT_LIST: Product[] = [
-  BOARD_001,
-  TEE_001,
-  STICKERS_001,
-  GIFTBOX_001,
-];
+export const PRODUCT_LIST: Product[] = [BOARD_001, TEE_001];
 
 export const PRODUCTS: Record<string, Product> = Object.fromEntries(
   PRODUCT_LIST.map((p) => [p.sku, p])

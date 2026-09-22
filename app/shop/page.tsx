@@ -3,6 +3,7 @@ import { SiteNav } from "@/components/site/nav";
 import { SiteFooter } from "@/components/site/footer";
 import { Marquee } from "@/components/landing/marquee";
 import { ProductGrid } from "@/components/shop/product-grid";
+import { ShopFaq } from "@/components/shop/shop-faq";
 import { PRODUCT_LIST } from "@/lib/products";
 import { PLACE } from "@/lib/place";
 
@@ -32,7 +33,7 @@ export default function ShopPage() {
             </h1>
             <p className="mt-8 max-w-2xl text-lg">
               Речі, які ми зробили для себе, а потім зрозуміли, що їх хочуть і
-              інші. Дошки, мерч і дрібниці з нашого дворика.
+              інші.
             </p>
             <p className="caps mt-6 text-xs">
               самовивіз із {PLACE.addressShort} · доставка новою поштою
@@ -67,6 +68,8 @@ export default function ShopPage() {
             </div>
           </section>
         )}
+
+        <ShopFaq />
       </main>
 
       <SiteFooter />
