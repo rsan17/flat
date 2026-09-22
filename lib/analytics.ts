@@ -7,7 +7,10 @@ export type CtaLocation =
   | "nav"
   | "product"
   | "cta_section"
-  | "club_section";
+  | "club_section"
+  | "pdp"
+  | "catalog"
+  | "shop_page";
 
 export type DeliveryType = "warehouse" | "postomat" | "pickup";
 

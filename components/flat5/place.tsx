@@ -37,7 +37,7 @@ export function Place() {
 
         <div className="md:col-span-12">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div className="shadow-brut relative aspect-square overflow-hidden border-2 border-ink bg-bone">
+            <div className="shadow-brut relative aspect-square overflow-hidden border-2 border-ink bg-cream">
               <Image
                 src="/img/main_3.jpg"
                 alt="FLAT5 — ратуша"
@@ -53,7 +53,7 @@ export function Place() {
               href="https://maps.app.goo.gl/FR3B8nWqyTe6Suff7"
               target="_blank"
               rel="noopener noreferrer"
-              className="shadow-brut relative block aspect-square overflow-hidden border-2 border-ink bg-bone"
+              className="shadow-brut relative block aspect-square overflow-hidden border-2 border-ink bg-cream"
             >
               <iframe
                 src="https://maps.google.com/maps?q=площа+Ринок+39+Львів+Україна&hl=uk&z=17&output=embed"

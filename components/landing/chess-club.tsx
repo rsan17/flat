@@ -52,11 +52,11 @@ export function ChessClub() {
   return (
     <section
       id="club"
-      className="border-b-2 border-ink bg-bone"
+      className="border-b-2 border-ink bg-cream"
     >
       <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-6 py-20 md:grid-cols-12">
         <div className="md:col-span-6">
-          <p className="caps text-xs">004 — F5 CHESS CLUB</p>
+          <p className="caps text-xs">006 — F5 CHESS CLUB</p>
           <h2 className="font-display mt-4 text-5xl leading-[0.9] md:text-7xl">
             F5 <span className="bg-lilac px-2">CHESS</span>
             <br />

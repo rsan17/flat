@@ -10,13 +10,53 @@
 - Monobank Acquiring + Nova Poshta proxy + Supabase + Resend
 - Деплой: Vercel (Next.js preset, `vercel.json` у репо), репо: https://github.com/rsan17/flat
 
+## Дизайн-система (брендбук FLAT5)
+
+- **Палітра:** `--color-lilac` `#CBB5DB` (LILAC ASH) · `--color-beam` `#FEF8D3`
+  (MELLOW BEAM, **тільки дрібні акценти — не тло**) · `--color-paper` `#fff`
+  (основне тло) · `--color-cream` `#F6F4F0` (чергування секцій) ·
+  `--color-ink` `#16131A`.
+- **Шрифти:** брендбук вимагає **Grind** (заголовки) + **Figma Hand** (рукописні
+  акценти). Ліцензійних вебфонтів ще немає, тому тимчасово:
+  `Roboto Condensed 900` (єдиний важкий вузький з кирилицею на Google Fonts) і
+  `Caveat`. Коли будуть файли Grind — `@font-face` + один рядок у `--font-display`.
+  ⚠️ Anton / Archivo Black / Bebas Neue **не мають кирилиці** — не пропонувати.
+- **⚠️ Кастомні класи тільки в `@layer components` / `@layer base`.** Незашарені
+  стилі в CSS-каскаді б'ють Tailwind-утиліти: `.btn` перебивав `hidden`, і
+  кнопка не ховалась на мобільному.
+- **Фірмові елементи:** гірлянда з прапорців, лодонька «дай п'ять і ще одну каву»,
+  стікери F5 (5 і 3 см). Джерело — `FLAT5.pdf` від дизайнера.
+
+## Структура сайту
+
+```
+/                 головна: hero дошки → about → дошка → каталог мерчу →
+                  блок про заклад → FAQ → chess club
+/shop             каталог: в наявності + скоро
+/shop/[slug]      PDP кожного товару (SSG через generateStaticParams)
+/flat5            заклад: місце, як знайти, що всередині, відчуття
+/checkout         чекаут (bound to ?product=&variant=)
+/order/[id]       сторінка успіху
+```
+
+- `components/site/` — спільні `SiteNav` / `SiteFooter` для всіх сторінок.
+- `components/shop/` — `ProductCard`, `ProductGrid`, `ProductShot`, `BuyBox`.
+  `BuyBox` один і той самий на PDP і в блоці дошки на головній.
+- `lib/place.ts` — єдине джерело фактів про заклад (адреса, години, меню).
+  Факти звірені з flat5.choiceqr.com і @flat5.lviv; **описові тексти — чернетка**.
+
 ## Конвенції
 
 - **i18n:** весь вміст українською. Без english-плейсхолдерів.
 - **API-ключі:** зовнішні API (Mono, NP, Resend) — тільки через route handlers у `app/api/**`. Жодних `NEXT_PUBLIC_` для секретів.
 - **`lib/order-store.ts`:** in-memory fallback ТІЛЬКИ для локального dev. У serverless-проді (Vercel) `globalThis.__ORDERS__` не виживає між запитами — обов'язково Supabase.
-- **`lib/products.ts`:** одне джерело цін і варіантів. SKU, `priceKopecks` (множимо на 100 в UAH). Не дублювати в UI.
+- **`lib/products.ts`:** одне джерело цін і варіантів. SKU = slug у `/shop/[slug]`.
+  `status: "available" | "soon" | "sold-out"` — усе, крім `available`, не
+  потрапляє в чекаут (гард у `/checkout` і в `/api/order/create`).
+  Гравіювання — опція конкретного товару (`product.engraving`), не глобальна.
 - **Ціни:** все в копійках (int), формат для UI — `formatUAH(kopecks)` у `lib/utils.ts`.
+  ⚠️ Не повертати туди `Intl` зі `style: "currency"`: Node ICU дає «799 ₴», а
+  Chrome — «799 грн» → hydration mismatch і стрибок ціни після гідратації.
 - **Доставка:** `warehouse` | `postomat` | `pickup` (самовивіз зі Львова, адреса в `PICKUP_ADDRESS`).
 - **Order number формат:** `TB-001-XXXX` (дроп `001`, 4 цифри). ⚠️ Див. «Відомі проблеми».
 - **Telegram / IG / email:** плейсхолдери. Замінити на реальні перед продом.

@@ -1,16 +1,18 @@
 import { About } from "@/components/landing/about";
+import { Catalog } from "@/components/landing/catalog";
 import { ChessClub } from "@/components/landing/chess-club";
 import { CTA } from "@/components/landing/cta";
-import { Footer } from "@/components/landing/footer";
 import { Hero } from "@/components/landing/hero";
 import { Marquee } from "@/components/landing/marquee";
-import { Nav } from "@/components/landing/nav";
+import { PlaceTeaser } from "@/components/landing/place-teaser";
 import { Product } from "@/components/landing/product";
+import { SiteFooter } from "@/components/site/footer";
+import { SiteNav } from "@/components/site/nav";
 
 export default function Home() {
   return (
     <>
-      <Nav />
+      <SiteNav />
       <Marquee />
       <main>
         <Hero />
@@ -20,10 +22,12 @@ export default function Home() {
           variant="lilac"
         />
         <Product />
+        <Catalog />
+        <PlaceTeaser />
         <CTA />
         <ChessClub />
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   );
 }

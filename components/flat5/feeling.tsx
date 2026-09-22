@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export function Feeling() {
   return (
-    <section id="feeling" className="border-b-2 border-ink bg-bone">
+    <section id="feeling" className="border-b-2 border-ink bg-cream">
       <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-6 py-24 md:grid-cols-12">
         <div className="md:col-span-5">
           <div className="shadow-brut relative aspect-[4/5] overflow-hidden border-2 border-ink bg-paper">

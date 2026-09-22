@@ -1,6 +1,7 @@
 "use client";
 
 import { formatUAH } from "@/lib/utils";
+import { ProductShot } from "@/components/shop/product-shot";
 import { ENGRAVING_FEE_KOPECKS, type Product, type ProductVariant } from "@/lib/products";
 
 type Props = {
@@ -22,21 +23,13 @@ export function OrderSummary({ product, variant, quantity, engraving, onQuantity
       <h3 className="font-display mt-1 text-3xl">{product.title}</h3>
 
       <div className="mt-6 flex items-start gap-4 border-t-2 border-ink pt-6">
-        <div className="relative h-24 w-24 flex-shrink-0 border-2 border-ink bg-lilac">
-          <div className="absolute inset-2 grid grid-cols-4 grid-rows-4">
-            {Array.from({ length: 16 }).map((_, i) => {
-              const row = Math.floor(i / 4);
-              const col = i % 4;
-              const dark = (row + col) % 2 === 1;
-              return (
-                <div
-                  key={i}
-                  className={dark ? "bg-ink" : "bg-paper"}
-                  aria-hidden
-                />
-              );
-            })}
-          </div>
+        <div className="relative h-24 w-24 flex-shrink-0 border-2 border-ink">
+          <ProductShot
+            media={product.media.find((m) => !m.video)}
+            sizes="96px"
+            showTag={false}
+            className="h-full w-full"
+          />
         </div>
         <div className="flex-1">
           <div className="font-display text-xl leading-tight">{variant.name}</div>
@@ -83,9 +76,11 @@ export function OrderSummary({ product, variant, quantity, engraving, onQuantity
         <span className="caps text-xs">до оплати</span>
         <span className="font-display text-4xl">{formatUAH(total)}</span>
       </div>
-      <p className="mt-4 rounded-sm bg-lilac px-3 py-2 text-xs">
-        Виготовлення <b>5-7 днів</b>. Після цього — відправка Новою поштою.
-      </p>
+      {product.category === "board" && (
+        <p className="mt-4 bg-lilac px-3 py-2 text-xs">
+          Виготовлення <b>5-7 днів</b>. Після цього — відправка Новою поштою.
+        </p>
+      )}
     </aside>
   );
 }

@@ -1,9 +1,10 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { CheckoutProgress } from "@/components/checkout/progress";
 import { CheckoutForm } from "@/components/checkout/checkout-form";
 import { CheckoutOpenTracker } from "@/components/analytics/checkout-open-tracker";
 import { Marquee } from "@/components/landing/marquee";
-import { findVariant, BOARD_001 } from "@/lib/products";
+import { findVariant, isPurchasable, BOARD_001 } from "@/lib/products";
 
 type SearchParams = Promise<{
   product?: string;
@@ -24,6 +25,10 @@ export default async function CheckoutPage({
     product: BOARD_001,
     variant: BOARD_001.variants[0],
   };
+  // Товар «скоро» / «розібрали» не можна оформити — назад на сторінку товару.
+  if (!isPurchasable(hit.product)) {
+    redirect(`/shop/${hit.product.sku}`);
+  }
   const initialEngraving = sp.engraving === "1" || sp.engraving === "true";
   const initialNickname = (sp.nickname ?? "").slice(0, 80);
 
@@ -32,11 +37,14 @@ export default async function CheckoutPage({
       <CheckoutOpenTracker />
       <header className="sticky top-0 z-30 border-b-2 border-ink bg-paper/95 backdrop-blur">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-3">
-          <Link href="/" className="font-display text-2xl">
-            F5·BOARD
+          <Link href="/" className="font-display text-3xl">
+            FLAT5
           </Link>
-          <Link href="/" className="caps text-xs hover:underline">
-            ← повернутись
+          <Link
+            href={`/shop/${hit.product.sku}`}
+            className="caps text-xs hover:underline"
+          >
+            ← до товару
           </Link>
         </div>
       </header>

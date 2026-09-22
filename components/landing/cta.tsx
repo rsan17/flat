@@ -9,7 +9,7 @@ export function CTA() {
       <div className="relative z-[2] mx-auto max-w-[1400px] px-6 py-24">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
           <div className="md:col-span-7">
-            <p className="caps text-xs text-lilac">003 — FAQ</p>
+            <p className="caps text-xs text-lilac">005 — FAQ</p>
             <h2 className="font-display mt-4 text-5xl leading-[0.9] md:text-8xl">
               ЛІМІТОВАНИЙ ДРОП.
               <br />
