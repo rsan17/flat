@@ -12,7 +12,8 @@ export function cn(...inputs: ClassValue[]) {
  */
 export function formatUAH(kopecks: number) {
   const grn = Math.round(kopecks / 100);
-  return `${new Intl.NumberFormat("uk-UA").format(grn)} ₴`;
+  // Перед ₴ стоїть нерозривний пробіл: ціна не має ламатись на два рядки.
+  return `${new Intl.NumberFormat("uk-UA").format(grn)} ₴`;
 }
 
 export function generateOrderNumber() {
