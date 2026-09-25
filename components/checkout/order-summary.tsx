@@ -27,7 +27,6 @@ export function OrderSummary({ product, variant, quantity, engraving, onQuantity
           <ProductShot
             media={product.media.find((m) => !m.video)}
             sizes="96px"
-            showTag={false}
             className="h-full w-full"
           />
         </div>

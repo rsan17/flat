@@ -12,6 +12,13 @@ import { PLACE } from "@/lib/place";
 
 type Params = Promise<{ slug: string }>;
 
+/** Умови отримання однакові для всіх товарів — дописуємо до характеристик. */
+const FULFILMENT_SPECS = [
+  { label: "самовивіз", value: PLACE.address },
+  { label: "доставка", value: "Нова Пошта — відділення або поштомат" },
+  { label: "оплата", value: "monobank: картка, Apple Pay, Google Pay" },
+];
+
 export function generateStaticParams() {
   return PRODUCT_LIST.map((p) => ({ slug: p.sku }));
 }
@@ -111,7 +118,7 @@ export default async function ProductPage({ params }: { params: Params }) {
               <BuyBox product={product} />
 
               <dl className="mt-10 border-t-2 border-ink pt-6">
-                {product.specs.map((s) => (
+                {[...product.specs, ...FULFILMENT_SPECS].map((s) => (
                   <div
                     key={s.label}
                     className="flex justify-between gap-6 border-b border-ink/15 py-3"
@@ -123,28 +130,6 @@ export default async function ProductPage({ params }: { params: Params }) {
                   </div>
                 ))}
               </dl>
-            </div>
-          </div>
-        </section>
-
-        {/* Опис */}
-        <section className="border-b-2 border-ink bg-cream">
-          <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-6 py-16 md:grid-cols-12">
-            <div className="md:col-span-4">
-              <p className="caps text-xs">про річ</p>
-              <h2 className="font-display mt-4 text-4xl md:text-5xl">
-                ЩО ЦЕ
-                <br />І НАВІЩО.
-              </h2>
-            </div>
-            <div className="space-y-5 text-lg md:col-span-7 md:col-start-6">
-              {product.description.map((p) => (
-                <p key={p.slice(0, 24)}>{p}</p>
-              ))}
-              <p className="caps border-l-4 border-lilac pl-4 text-xs opacity-80">
-                самовивіз із {PLACE.addressShort} · доставка новою поштою ·
-                оплата mono
-              </p>
             </div>
           </div>
         </section>

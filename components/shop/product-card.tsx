@@ -24,7 +24,6 @@ export function ProductCard({ product }: { product: Product }) {
           <ProductShot
             media={product.media[0]}
             sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
-            showTag={false}
             className="h-full w-full"
           />
           {statusLabel && (

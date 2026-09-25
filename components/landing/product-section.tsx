@@ -42,8 +42,7 @@ export function ProductSection({
             <ProductShot
               media={product.media[0]}
               sizes="(min-width: 768px) 48vw, 100vw"
-              showTag={false}
-              className="h-full w-full"
+                className="h-full w-full"
             />
           </div>
         </div>

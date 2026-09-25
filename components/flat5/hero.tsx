@@ -41,9 +41,6 @@ export function Hero() {
               sizes="(min-width: 1024px) 40vw, 100vw"
               className="object-cover"
             />
-            <span className="caps absolute right-3 top-3 bg-ink px-2 py-1 text-[10px] text-lilac">
-              FLAT · 5
-            </span>
           </div>
         </div>
       </div>

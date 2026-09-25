@@ -45,9 +45,6 @@ export function Place() {
                 sizes="(min-width: 1024px) 33vw, 100vw"
                 className="object-cover"
               />
-              <span className="caps absolute bottom-3 left-3 bg-ink px-2 py-1 text-[10px] text-lilac">
-                02 · RATUSHA
-              </span>
             </div>
             <a
               href="https://maps.app.goo.gl/FR3B8nWqyTe6Suff7"
@@ -62,10 +59,10 @@ export function Place() {
                 title="FLAT5 на карті"
               />
               <span className="caps absolute bottom-3 left-3 bg-ink px-2 py-1 text-[10px] text-lilac">
-                03 · MAP · відкрити ↗
+                відкрити на карті ↗
               </span>
             </a>
-            <Photo tag="04 · VIBE" bg="bg-paper" />
+            <Photo bg="bg-paper" />
           </div>
         </div>
       </div>
@@ -73,13 +70,13 @@ export function Place() {
   );
 }
 
-function Photo({ tag, bg }: { tag: string; bg: string }) {
+function Photo({ bg }: { bg: string }) {
   return (
     <div
       className={`shadow-brut relative aspect-square border-2 border-ink ${bg}`}
     >
       <span className="caps absolute bottom-3 left-3 bg-ink px-2 py-1 text-[10px] text-lilac">
-        {tag} · фото скоро
+        фото скоро
       </span>
     </div>
   );

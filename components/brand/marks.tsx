@@ -6,32 +6,10 @@ import Image from "next/image";
  *
  * Правило використання: не більше одного елемента на екран.
  * Це акценти, а не патерн — вони працюють, поки їх помічаєш не одразу.
+ *
+ * Гірлянда (`/public/brand/garland.svg`) лежить готова, але свідомо не
+ * використовується: як роздільник між секціями вона виглядала чужорідно.
  */
-
-/** Гірлянда з дворика. Тонкий роздільник між секціями. */
-export function Garland({
-  className = "",
-  flip = false,
-}: {
-  className?: string;
-  flip?: boolean;
-}) {
-  return (
-    <div
-      aria-hidden
-      className={`pointer-events-none flex items-center justify-center px-6 ${className}`}
-    >
-      <Image
-        src="/brand/garland.svg"
-        alt=""
-        width={837}
-        height={210}
-        unoptimized
-        className={`h-auto w-full max-w-[900px] ${flip ? "-scale-x-100" : ""}`}
-      />
-    </div>
-  );
-}
 
 /** Лодонька «дай п'ять та ще одну каву». */
 export function Hand({ className = "" }: { className?: string }) {

@@ -14,9 +14,6 @@ export function Feeling() {
               sizes="(min-width: 1024px) 40vw, 100vw"
               className="object-cover"
             />
-            <span className="caps absolute bottom-3 left-3 bg-ink px-2 py-1 text-[10px] text-lilac">
-              07 · MOOD
-            </span>
           </div>
         </div>
         <div className="md:col-span-6 md:col-start-7 md:self-center">

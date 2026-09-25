@@ -16,13 +16,11 @@ export function ProductShot({
   media,
   sizes,
   priority,
-  showTag = true,
   className = "",
 }: {
   media?: ProductMedia;
   sizes: string;
   priority?: boolean;
-  showTag?: boolean;
   className?: string;
 }) {
   if (!media) {
@@ -36,11 +34,9 @@ export function ProductShot({
         >
           F5
         </span>
-        {showTag && (
-          <span className="caps absolute bottom-3 left-3 bg-ink px-2 py-1 text-[10px] text-paper">
-            фото скоро
-          </span>
-        )}
+        <span className="caps absolute bottom-3 left-3 bg-ink px-2 py-1 text-[10px] text-paper">
+          фото скоро
+        </span>
       </div>
     );
   }
@@ -68,11 +64,6 @@ export function ProductShot({
           sizes={sizes}
           className="object-cover"
         />
-      )}
-      {showTag && (
-        <span className="caps absolute bottom-3 left-3 bg-ink px-2 py-1 text-[10px] text-paper">
-          {media.tag}
-        </span>
       )}
     </div>
   );

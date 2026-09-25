@@ -1,4 +1,3 @@
-import { Garland } from "@/components/brand/marks";
 import { ChessClub } from "@/components/landing/chess-club";
 import { Hero } from "@/components/landing/hero";
 import { Marquee } from "@/components/landing/marquee";
@@ -18,8 +17,6 @@ export default function Home() {
       <Marquee />
       <main>
         <Hero />
-
-        <Garland className="border-b-2 border-ink bg-paper py-6 md:py-8" />
 
         {PRODUCT_LIST.map((product, i) => (
           <ProductSection

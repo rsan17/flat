@@ -149,19 +149,15 @@ export function BuyBox({
             </span>
           </>
         ) : canSubmit ? (
-          <>
-            <TrackedLink
-              event="cta_click"
-              location={location}
-              href={checkoutHref}
-              className="btn btn-lilac"
-            >
-              замовити · {formatUAH(totalKopecks)}
-            </TrackedLink>
-            <span className="caps text-xs opacity-70">
-              доставка нп · оплата mono
-            </span>
-          </>
+          // Умови доставки й оплати — нижче в характеристиках, тут не дублюємо.
+          <TrackedLink
+            event="cta_click"
+            location={location}
+            href={checkoutHref}
+            className="btn btn-lilac"
+          >
+            замовити · {formatUAH(totalKopecks)}
+          </TrackedLink>
         ) : (
           <button
             type="button"
