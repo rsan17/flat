@@ -7,7 +7,7 @@
 - Next.js 15 App Router · TypeScript · Tailwind v4 через `@theme` в `app/globals.css`
 - shadcn-стиль utility-компоненти в `components/*`, без radix поки
 - RHF + Zod `discriminatedUnion` по `deliveryType` у чекауті
-- Monobank Acquiring + Nova Poshta proxy + Supabase + Resend
+- Monobank Acquiring + Nova Poshta proxy + Neon Postgres + Telegram-сповіщення
 - Деплой: Vercel (Next.js preset, `vercel.json` у репо), репо: https://github.com/rsan17/flat
 
 ## Дизайн-система (брендбук FLAT5)
@@ -39,7 +39,8 @@
 ```
 
 Окремої сторінки каталогу **немає навмисно**: товарів мало, головна і є
-каталогом. Посилання «товари» ведуть на `/#<sku>` — якір секції на головній.
+каталогом. Посилання «товари» / «купити» ведуть на `/#shop` — hero головної,
+під яким одразу секції товарів (кожна з якорем `/#<sku>`).
 
 **На PDP немає блоку-опису.** Характеристики товару і умови отримання
 (самовивіз / доставка / оплата) — одним списком під кнопкою. `product.description`
@@ -59,7 +60,7 @@
 ## Конвенції
 
 - **i18n:** весь вміст українською. Без english-плейсхолдерів.
-- **API-ключі:** зовнішні API (Mono, NP, Resend) — тільки через route handlers у `app/api/**`. Жодних `NEXT_PUBLIC_` для секретів.
+- **API-ключі:** зовнішні API (Mono, NP, Telegram) — тільки через route handlers у `app/api/**`. Жодних `NEXT_PUBLIC_` для секретів.
 - **`lib/order-store.ts`:** in-memory fallback ТІЛЬКИ для локального dev. У serverless-проді (Vercel) `globalThis.__ORDERS__` не виживає між запитами — обов'язково Supabase.
 - **`lib/products.ts`:** одне джерело цін і варіантів. SKU = slug у `/shop/[slug]`.
   `status: "available" | "soon" | "sold-out"` — усе, крім `available`, не
@@ -70,7 +71,7 @@
   Chrome — «799 грн» → hydration mismatch і стрибок ціни після гідратації.
 - **Доставка:** `warehouse` | `postomat` | `pickup` (самовивіз зі Львова, адреса в `PICKUP_ADDRESS`).
 - **Order number формат:** `TB-001-XXXX` (дроп `001`, 4 цифри). ⚠️ Див. «Відомі проблеми».
-- **Telegram / IG / email:** плейсхолдери. Замінити на реальні перед продом.
+- **Telegram / IG:** плейсхолдери. Замінити на реальні перед продом.
 - **Бренд-елементи:** `/public/brand/*.svg` — це справжня векторна графіка
   дизайнера, витягнута з `FLAT5.pdf` (гірлянда, лодонька, диван).
   Правило з `components/brand/marks.tsx`: **не більше одного елемента на екран**.
@@ -87,6 +88,18 @@
   `items[]`, хоча чекаут кладе туди рівно одну позицію. Коли зʼявиться кошик —
   міняється лише той, хто збирає масив. У повідомленні є артикул
   (`sku / variant`), щоб на складі не плутати розміри.
+- **Листів немає.** `lib/email.ts` видалено: обидві функції були заглушками
+  `return { skipped: true }`, тобто за пів року жоден покупець не отримав
+  підтвердження, хоча вебхук «рапортував» про відправку. Єдиний канал
+  сповіщень — Telegram.
+- **Вебхук Mono мусить бути гучним.** Це єдине місце, де замовлення стає
+  оплаченим, і помилку там ніхто не побачить — клієнт уже пішов. Не повертати
+  звідти 200, якщо щось не спрацювало: 404 якщо замовлення не знайдено,
+  500 на помилку БД, 503 якщо не вдалось перевірити підпис. На всі три Mono
+  повторить спробу; на 200 — ні.
+- **`payment_success` рахується на клієнті** (`PurchaseTracker` на сторінці
+  замовлення), а не з вебхука. Серверний `@vercel/analytics/server` за пів року
+  не записав жодної події, хоча оплати були.
 
 ### 7. F5 Chess Club · одноразові Telegram-інвайти
 Зараз `/api/club/join` віддає статичний інвайт із `F5_TG_INVITE_URL` (env)
@@ -117,9 +130,6 @@ phone. Звʼязок club_members ↔ orders по телефону.
 
 ### Critical — блокують прод
 
-**C1. Mono webhook без верифікації підпису**
-`app/api/mono/webhook/route.ts:13` — TODO коментар, ніякої перевірки `X-Sign`. Атакувальник може POST-нути `{invoiceId, status: "success"}` і тригернути email "оплачено" + apm update. Потрібна перевірка через `/api/merchant/pubkey` + ECDSA verify.
-
 **C2. In-memory store ≠ serverless**
 `lib/order-store.ts` — `globalThis.__ORDERS__` не виживає між Vercel function invocations. Без Supabase: замовлення створюється → клієнт летить на `/order/[id]` → 404. На Vercel прод **непрацюючий без Supabase env-вар**.
 
@@ -131,16 +141,10 @@ phone. Звʼязок club_members ↔ orders по телефону.
 **H1. Order number колізії**
 `lib/utils.ts:17-19` — `Math.random() * 9000` → 9000 можливих значень. DB має `unique`, але через C3 помилка ковтається. Fix: suffix з `Date.now() % 10000` або nanoid.
 
-**H2. Phone input баг при paste**
-`components/checkout/checkout-form.tsx:50-55` — якщо вставити `050 123 45 67` (без `+380`), логіка `"380" + v.replace(/^380/, "")` при slice до 12 символів обрізає останню цифру. Fix: нормалізувати до 9 останніх digits після `380`.
-
 **H3. NP endpoints HTTP 200 на помилку**
 `app/api/nova-poshta/cities/route.ts:17-20`, `warehouses/route.ts:22-28` — повертають 200 з `error` полем. Клієнт не бачить різниці між "нема результатів" і "API лежить". Fix: 502 на fail.
 
 ### Medium
-
-**M1. Email from `orders@theboard.local` — невалідний**
-`lib/email.ts:29,57` — `.local` не TLD, Resend відхилить. Потрібен верифікований домен (theboard.com.ua / .store).
 
 **M2. Warehouse input без debounce**
 `components/checkout/nova-poshta-picker.tsx:98-111` — місто має 300мс debounce, відділення — ні. Кожен keystroke → HTTP. Fix: обернути `warehouseQuery` у debounced state.
@@ -181,11 +185,9 @@ phone. Звʼязок club_members ↔ orders по телефону.
 - Ручне проставляння статусу `shipped` + введення ТТН
 - Auth через Supabase (magic link на `ADMIN_EMAIL`)
 
-### 3. Mono webhook signature (= C1)
-Перевірка `X-Sign` через публічний ключ з `GET /api/merchant/pubkey`. ECDSA P-256 + SHA-256.
-
-### 4. Email → React Email
-Винести inline HTML з `lib/email.ts` у React Email компоненти. Зараз шаблони копіпастяться.
+### 3. Листи клієнту (якщо колись знадобляться)
+Зараз листів немає взагалі — `lib/email.ts` видалено, сповіщення тільки в
+Telegram. Якщо повертати: Resend + верифікований домен відправника.
 
 ### 5. Inventory (12/12 хардкод)
 Після Supabase — тягнути `stock_remaining` з БД, блокувати "купити" при 0. Декремент у транзакції при створенні `paid` ордера.
