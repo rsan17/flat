@@ -49,9 +49,9 @@ type PubkeyCache = { pem: string; fetchedAt: number };
 let pubkeyCache: PubkeyCache | null = null;
 const PUBKEY_TTL_MS = 60 * 60 * 1000;
 
-async function getMonoPubkey(): Promise<string> {
+async function getMonoPubkey(forceRefresh = false): Promise<string> {
   const now = Date.now();
-  if (pubkeyCache && now - pubkeyCache.fetchedAt < PUBKEY_TTL_MS) {
+  if (!forceRefresh && pubkeyCache && now - pubkeyCache.fetchedAt < PUBKEY_TTL_MS) {
     return pubkeyCache.pem;
   }
   const token = process.env.MONO_API_TOKEN;
@@ -67,18 +67,60 @@ async function getMonoPubkey(): Promise<string> {
   return pem;
 }
 
+/**
+ * Результат перевірки підпису вебхука.
+ *
+ * «Не змогли перевірити» і «підпис не збігається» — це різні речі:
+ * перше означає, що в нас проблема (не дістали ключ Mono), і відповідати
+ * на такий вебхук 401 не можна, бо Mono перестане повторювати спробу,
+ * а замовлення назавжди зависне в pending.
+ */
+export type MonoSignatureCheck =
+  | { status: "valid" }
+  | { status: "invalid" }
+  | { status: "unavailable"; reason: string };
+
+function verifyWithPem(pem: string, rawBody: string, signatureBase64: string): boolean {
+  const publicKey = crypto.createPublicKey(pem);
+  const verify = crypto.createVerify("SHA256");
+  verify.update(rawBody);
+  verify.end();
+  // Mono підписує ECDSA P-256 + SHA-256, підпис у DER — це дефолт для EC-ключа.
+  return verify.verify(publicKey, signatureBase64, "base64");
+}
+
 export async function verifyMonoSignature(
   rawBody: string,
   signatureBase64: string,
-): Promise<boolean> {
+): Promise<MonoSignatureCheck> {
+  let pem: string;
   try {
-    const pem = await getMonoPubkey();
-    const publicKey = crypto.createPublicKey(pem);
-    const verify = crypto.createVerify("SHA256");
-    verify.update(rawBody);
-    verify.end();
-    return verify.verify(publicKey, signatureBase64, "base64");
-  } catch {
-    return false;
+    pem = await getMonoPubkey();
+  } catch (err) {
+    return {
+      status: "unavailable",
+      reason: err instanceof Error ? err.message : "pubkey fetch failed",
+    };
   }
+
+  try {
+    if (verifyWithPem(pem, rawBody, signatureBase64)) return { status: "valid" };
+  } catch {
+    // Зіпсований підпис або ключ — пробуємо ще раз зі свіжим ключем нижче.
+  }
+
+  // Ключ міг змінитись, а в нас лежить закешований. Оновлюємо й пробуємо востаннє.
+  try {
+    const freshPem = await getMonoPubkey(true);
+    if (freshPem !== pem && verifyWithPem(freshPem, rawBody, signatureBase64)) {
+      return { status: "valid" };
+    }
+  } catch (err) {
+    return {
+      status: "unavailable",
+      reason: err instanceof Error ? err.message : "pubkey refresh failed",
+    };
+  }
+
+  return { status: "invalid" };
 }

@@ -37,23 +37,20 @@ export function Place() {
 
         <div className="md:col-span-12">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div className="shadow-brut relative aspect-square overflow-hidden border-2 border-ink bg-bone">
+            <div className="shadow-brut relative aspect-square overflow-hidden border-2 border-ink bg-cream">
               <Image
-                src="/img/main_3.jpg"
-                alt="FLAT5 — ратуша"
+                src="/img/place/yard-day.webp"
+                alt="Дворик FLAT5 удень: столики, парасолі й гірлянда з прапорців"
                 fill
                 sizes="(min-width: 1024px) 33vw, 100vw"
                 className="object-cover"
               />
-              <span className="caps absolute bottom-3 left-3 bg-ink px-2 py-1 text-[10px] text-lilac">
-                02 · RATUSHA
-              </span>
             </div>
             <a
               href="https://maps.app.goo.gl/FR3B8nWqyTe6Suff7"
               target="_blank"
               rel="noopener noreferrer"
-              className="shadow-brut relative block aspect-square overflow-hidden border-2 border-ink bg-bone"
+              className="shadow-brut relative block aspect-square overflow-hidden border-2 border-ink bg-cream"
             >
               <iframe
                 src="https://maps.google.com/maps?q=площа+Ринок+39+Львів+Україна&hl=uk&z=17&output=embed"
@@ -62,25 +59,21 @@ export function Place() {
                 title="FLAT5 на карті"
               />
               <span className="caps absolute bottom-3 left-3 bg-ink px-2 py-1 text-[10px] text-lilac">
-                03 · MAP · відкрити ↗
+                відкрити на карті ↗
               </span>
             </a>
-            <Photo tag="04 · VIBE" bg="bg-paper" />
+            <div className="shadow-brut relative aspect-square overflow-hidden border-2 border-ink bg-cream">
+              <Image
+                src="/img/place/inside-garlands.webp"
+                alt="Всередині FLAT5: паперові гірлянди під стелею й таблиця рейтингу шахового клубу"
+                fill
+                sizes="(min-width: 1024px) 33vw, 100vw"
+                className="object-cover"
+              />
+            </div>
           </div>
         </div>
       </div>
     </section>
-  );
-}
-
-function Photo({ tag, bg }: { tag: string; bg: string }) {
-  return (
-    <div
-      className={`shadow-brut relative aspect-square border-2 border-ink ${bg}`}
-    >
-      <span className="caps absolute bottom-3 left-3 bg-ink px-2 py-1 text-[10px] text-lilac">
-        {tag} · фото скоро
-      </span>
-    </div>
   );
 }

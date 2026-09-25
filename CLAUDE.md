@@ -7,19 +7,99 @@
 - Next.js 15 App Router · TypeScript · Tailwind v4 через `@theme` в `app/globals.css`
 - shadcn-стиль utility-компоненти в `components/*`, без radix поки
 - RHF + Zod `discriminatedUnion` по `deliveryType` у чекауті
-- Monobank Acquiring + Nova Poshta proxy + Supabase + Resend
+- Monobank Acquiring + Nova Poshta proxy + Neon Postgres + Telegram-сповіщення
 - Деплой: Vercel (Next.js preset, `vercel.json` у репо), репо: https://github.com/rsan17/flat
+
+## Дизайн-система (брендбук FLAT5)
+
+- **Палітра:** `--color-lilac` `#CBB5DB` (LILAC ASH) · `--color-beam` `#FEF8D3`
+  (MELLOW BEAM, **тільки дрібні акценти — не тло**) · `--color-paper` `#fff`
+  (основне тло) · `--color-cream` `#F6F4F0` (чергування секцій) ·
+  `--color-ink` `#16131A`.
+- **Шрифти:** брендбук вимагає **Grind** (заголовки) + **Figma Hand** (рукописні
+  акценти). Ліцензійних вебфонтів ще немає, тому тимчасово:
+  `Roboto Condensed 900` (єдиний важкий вузький з кирилицею на Google Fonts) і
+  `Caveat`. Коли будуть файли Grind — `@font-face` + один рядок у `--font-display`.
+  ⚠️ Anton / Archivo Black / Bebas Neue **не мають кирилиці** — не пропонувати.
+- **⚠️ Кастомні класи тільки в `@layer components` / `@layer base`.** Незашарені
+  стилі в CSS-каскаді б'ють Tailwind-утиліти: `.btn` перебивав `hidden`, і
+  кнопка не ховалась на мобільному.
+- **Фірмові елементи:** гірлянда з прапорців, лодонька «дай п'ять і ще одну каву»,
+  стікери F5 (5 і 3 см). Джерело — `FLAT5.pdf` від дизайнера.
+
+## Структура сайту
+
+```
+/                 головна-вітрина: hero → по секції на кожен товар →
+                  блок про заклад → chess club
+/product/[slug]   PDP кожного товару (SSG) + FAQ доставки й оплати
+/flat5            заклад: місце, як знайти, що всередині, відчуття
+/checkout         чекаут (bound to ?product=&variant=)
+/order/[id]       сторінка успіху
+```
+
+Окремої сторінки каталогу **немає навмисно**: товарів мало, головна і є
+каталогом. Посилання «товари» / «купити» ведуть на `/#shop` — hero головної,
+під яким одразу секції товарів (кожна з якорем `/#<sku>`).
+
+**На PDP немає блоку-опису.** Характеристики товару і умови отримання
+(самовивіз / доставка / оплата) — одним списком під кнопкою. `product.description`
+лишився в даних, але не рендериться.
+
+**Головна нічого не продає.** Секції товарів (`ProductSection`) дають назву,
+3 характеристики, ціну і перехід на PDP — без вибору розміру, гравіювання і
+кнопки «замовити». Це навмисно: одна точка купівлі — PDP. Секції генеруються
+з `PRODUCT_LIST`, тож новий товар зʼявляється на головній сам.
+
+- `components/site/` — спільні `SiteNav` / `SiteFooter` для всіх сторінок.
+- `components/shop/` — `ProductCard`, `ProductGrid`, `ProductShot`, `BuyBox`.
+  `BuyBox` один і той самий на PDP і в блоці дошки на головній.
+- `lib/place.ts` — єдине джерело фактів про заклад (адреса, години, меню).
+  Факти звірені з flat5.choiceqr.com і @flat5.lviv; **описові тексти — чернетка**.
 
 ## Конвенції
 
 - **i18n:** весь вміст українською. Без english-плейсхолдерів.
-- **API-ключі:** зовнішні API (Mono, NP, Resend) — тільки через route handlers у `app/api/**`. Жодних `NEXT_PUBLIC_` для секретів.
+- **API-ключі:** зовнішні API (Mono, NP, Telegram) — тільки через route handlers у `app/api/**`. Жодних `NEXT_PUBLIC_` для секретів.
 - **`lib/order-store.ts`:** in-memory fallback ТІЛЬКИ для локального dev. У serverless-проді (Vercel) `globalThis.__ORDERS__` не виживає між запитами — обов'язково Supabase.
-- **`lib/products.ts`:** одне джерело цін і варіантів. SKU, `priceKopecks` (множимо на 100 в UAH). Не дублювати в UI.
+- **`lib/products.ts`:** одне джерело цін і варіантів. SKU = slug у `/shop/[slug]`.
+  `status: "available" | "soon" | "sold-out"` — усе, крім `available`, не
+  потрапляє в чекаут (гард у `/checkout` і в `/api/order/create`).
+  Гравіювання — опція конкретного товару (`product.engraving`), не глобальна.
 - **Ціни:** все в копійках (int), формат для UI — `formatUAH(kopecks)` у `lib/utils.ts`.
+  ⚠️ Не повертати туди `Intl` зі `style: "currency"`: Node ICU дає «799 ₴», а
+  Chrome — «799 грн» → hydration mismatch і стрибок ціни після гідратації.
 - **Доставка:** `warehouse` | `postomat` | `pickup` (самовивіз зі Львова, адреса в `PICKUP_ADDRESS`).
 - **Order number формат:** `TB-001-XXXX` (дроп `001`, 4 цифри). ⚠️ Див. «Відомі проблеми».
-- **Telegram / IG / email:** плейсхолдери. Замінити на реальні перед продом.
+- **Telegram / IG:** плейсхолдери. Замінити на реальні перед продом.
+- **Бренд-елементи:** `/public/brand/*.svg` — це справжня векторна графіка
+  дизайнера, витягнута з `FLAT5.pdf` (гірлянда, лодонька, диван).
+  Правило з `components/brand/marks.tsx`: **не більше одного елемента на екран**.
+  Зараз використовуються лише лодонька (футер) і диван (`/flat5`); гірлянда
+  лежить у `/public/brand`, але як роздільник між секціями виглядала чужорідно.
+- **Фото закладу:** `/public/img/place/*` (дворик, вхід, інтер'єр),
+  `/public/img/club/*` (шахові столи), `/public/img/tee/*` (футболка).
+  Оригінали — з телефону власників, сконвертовані в webp q82.
+  ⚠️ Серед надісланих фото були чужа контактна картка з номером телефону і
+  фото собаки вдома — не публікуємо, у репо їх немає.
+- **Жодних підписів на фото.** Ярлики «01 · TOP», «04 · VIBE» прибрані:
+  нумерувати кадри — зайвий шум. Лишається тільки «фото скоро» на заглушках.
+- **Telegram-бот** (`lib/telegram.ts`): замовлення описується масивом
+  `items[]`, хоча чекаут кладе туди рівно одну позицію. Коли зʼявиться кошик —
+  міняється лише той, хто збирає масив. У повідомленні є артикул
+  (`sku / variant`), щоб на складі не плутати розміри.
+- **Листів немає.** `lib/email.ts` видалено: обидві функції були заглушками
+  `return { skipped: true }`, тобто за пів року жоден покупець не отримав
+  підтвердження, хоча вебхук «рапортував» про відправку. Єдиний канал
+  сповіщень — Telegram.
+- **Вебхук Mono мусить бути гучним.** Це єдине місце, де замовлення стає
+  оплаченим, і помилку там ніхто не побачить — клієнт уже пішов. Не повертати
+  звідти 200, якщо щось не спрацювало: 404 якщо замовлення не знайдено,
+  500 на помилку БД, 503 якщо не вдалось перевірити підпис. На всі три Mono
+  повторить спробу; на 200 — ні.
+- **`payment_success` рахується на клієнті** (`PurchaseTracker` на сторінці
+  замовлення), а не з вебхука. Серверний `@vercel/analytics/server` за пів року
+  не записав жодної події, хоча оплати були.
 
 ### 7. F5 Chess Club · одноразові Telegram-інвайти
 Зараз `/api/club/join` віддає статичний інвайт із `F5_TG_INVITE_URL` (env)
@@ -50,9 +130,6 @@ phone. Звʼязок club_members ↔ orders по телефону.
 
 ### Critical — блокують прод
 
-**C1. Mono webhook без верифікації підпису**
-`app/api/mono/webhook/route.ts:13` — TODO коментар, ніякої перевірки `X-Sign`. Атакувальник може POST-нути `{invoiceId, status: "success"}` і тригернути email "оплачено" + apm update. Потрібна перевірка через `/api/merchant/pubkey` + ECDSA verify.
-
 **C2. In-memory store ≠ serverless**
 `lib/order-store.ts` — `globalThis.__ORDERS__` не виживає між Vercel function invocations. Без Supabase: замовлення створюється → клієнт летить на `/order/[id]` → 404. На Vercel прод **непрацюючий без Supabase env-вар**.
 
@@ -64,16 +141,10 @@ phone. Звʼязок club_members ↔ orders по телефону.
 **H1. Order number колізії**
 `lib/utils.ts:17-19` — `Math.random() * 9000` → 9000 можливих значень. DB має `unique`, але через C3 помилка ковтається. Fix: suffix з `Date.now() % 10000` або nanoid.
 
-**H2. Phone input баг при paste**
-`components/checkout/checkout-form.tsx:50-55` — якщо вставити `050 123 45 67` (без `+380`), логіка `"380" + v.replace(/^380/, "")` при slice до 12 символів обрізає останню цифру. Fix: нормалізувати до 9 останніх digits після `380`.
-
 **H3. NP endpoints HTTP 200 на помилку**
 `app/api/nova-poshta/cities/route.ts:17-20`, `warehouses/route.ts:22-28` — повертають 200 з `error` полем. Клієнт не бачить різниці між "нема результатів" і "API лежить". Fix: 502 на fail.
 
 ### Medium
-
-**M1. Email from `orders@theboard.local` — невалідний**
-`lib/email.ts:29,57` — `.local` не TLD, Resend відхилить. Потрібен верифікований домен (theboard.com.ua / .store).
 
 **M2. Warehouse input без debounce**
 `components/checkout/nova-poshta-picker.tsx:98-111` — місто має 300мс debounce, відділення — ні. Кожен keystroke → HTTP. Fix: обернути `warehouseQuery` у debounced state.
@@ -114,11 +185,9 @@ phone. Звʼязок club_members ↔ orders по телефону.
 - Ручне проставляння статусу `shipped` + введення ТТН
 - Auth через Supabase (magic link на `ADMIN_EMAIL`)
 
-### 3. Mono webhook signature (= C1)
-Перевірка `X-Sign` через публічний ключ з `GET /api/merchant/pubkey`. ECDSA P-256 + SHA-256.
-
-### 4. Email → React Email
-Винести inline HTML з `lib/email.ts` у React Email компоненти. Зараз шаблони копіпастяться.
+### 3. Листи клієнту (якщо колись знадобляться)
+Зараз листів немає взагалі — `lib/email.ts` видалено, сповіщення тільки в
+Telegram. Якщо повертати: Resend + верифікований домен відправника.
 
 ### 5. Inventory (12/12 хардкод)
 Після Supabase — тягнути `stock_remaining` з БД, блокувати "купити" при 0. Декремент у транзакції при створенні `paid` ордера.

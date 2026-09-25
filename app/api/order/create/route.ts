@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { checkoutSchema } from "@/lib/validators";
-import { findVariant, ENGRAVING_FEE_KOPECKS } from "@/lib/products";
+import { findVariant, isPurchasable } from "@/lib/products";
 import { generateOrderNumber } from "@/lib/utils";
 import { createMonoInvoice } from "@/lib/mono";
 import { dbConfigured, insertOrder } from "@/lib/db";
@@ -45,7 +45,21 @@ export async function POST(req: Request) {
     );
   }
 
+  if (!isPurchasable(found.product) || found.variant.soldOut) {
+    return NextResponse.json(
+      { ok: false, error: "Товар зараз недоступний до замовлення" },
+      { status: 400 },
+    );
+  }
+
   const engraving = data.engraving === true;
+
+  if (engraving && !found.product.engraving) {
+    return NextResponse.json(
+      { ok: false, error: "Для цього товару гравіювання недоступне" },
+      { status: 400 },
+    );
+  }
   // Гравіювання — тільки великими літерами. Нормалізуємо на випадок прямого API-виклику.
   const clubMemberNameRaw = data.clubMemberName?.trim() || "";
   const clubMemberName = clubMemberNameRaw
@@ -53,7 +67,7 @@ export async function POST(req: Request) {
       ? clubMemberNameRaw.toUpperCase()
       : clubMemberNameRaw
     : null;
-  const engravingFee = engraving ? ENGRAVING_FEE_KOPECKS : 0;
+  const engravingFee = engraving ? (found.product.engraving?.priceKopecks ?? 0) : 0;
   const total = found.variant.priceKopecks * data.quantity + engravingFee;
   const id = randomUUID();
   const orderNumber = generateOrderNumber();
@@ -134,14 +148,22 @@ export async function POST(req: Request) {
     deliveryType: data.deliveryType,
     city: isPickup ? "" : data.city ?? "",
     warehouse: isPickup ? "" : data.warehouse ?? "",
-    productTitle: found.product.title,
-    variantName: found.variant.name,
-    quantity: data.quantity,
+    // Поки одна позиція, але формат уже готовий до кошика.
+    items: [
+      {
+        productSku: found.product.sku,
+        productTitle: found.product.title,
+        variantSku: found.variant.sku,
+        variantName: found.variant.name,
+        quantity: data.quantity,
+        unitPriceKopecks: found.variant.priceKopecks,
+        engravingText: engraving ? clubMemberName : null,
+        engravingFeeKopecks: engravingFee,
+      },
+    ],
     totalKopecks: total,
-    engraving,
-    engravingFee,
-    clubMemberName: data.clubMemberName?.trim() || null,
     comment: data.comment || null,
+    orderUrl: `${siteUrl}/order/${id}`,
   });
   if (!tg.ok) {
     console.error("Telegram notification failed:", tg.error);

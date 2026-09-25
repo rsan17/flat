@@ -1,70 +1,28 @@
-import Image from "next/image";
-import { TrackedLink } from "@/components/analytics/tracked-link";
+import { PLACE } from "@/lib/place";
 
+/**
+ * Hero магазину — коротка «вивіска»: назва, одне речення, рядок про каву.
+ * Без картинки і без списку товарів, щоб висота не росла з асортиментом
+ * і перший товар було видно одразу під ним.
+ */
 export function Hero() {
   return (
-    <section className="grain relative border-b-2 border-ink bg-paper">
-      <div className="relative z-[2] mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-10 px-6 py-14 md:grid-cols-12 md:py-20">
-        <div className="md:col-span-6">
-          <p className="caps mb-6 text-xs">DROP 001 · UA · HANDMADE</p>
-          <h1 className="font-display text-[13vw] leading-[0.82] md:text-[8.5vw] lg:text-[8rem]">
-            ШАХИ
-            <br />
-            <span className="inline-block bg-lilac px-3 py-1">НЕ ЯК</span>{" "}
-            У ВСІХ.
-          </h1>
-          <p className="mt-8 max-w-xl text-lg md:text-xl">
-            Кастомні дошки, створені за допомогою 3D-друку нового покоління.
-            Продумана вага кожної фігури, магнітна фіксація та компактність —
-            для ідеального відчуття гри.
-            <span className="mt-3 block text-sm opacity-80 md:text-base">
-              Обмежена серія — лише 55 штук на дроп.
-            </span>
+    <section id="shop" className="grain relative border-b-2 border-ink bg-paper">
+      <div className="relative z-[2] mx-auto max-w-[1400px] px-6 py-10 md:py-16">
+        <p className="caps mb-5 text-xs">
+          FLAT5 · ЛЬВІВ · {PLACE.addressShort.toUpperCase()}
+        </p>
+        <h1 className="font-display text-[15vw] leading-[0.9] md:text-[9vw] lg:text-[9rem]">
+          FLAT5 <span className="hl">SHOP.</span>
+        </h1>
+        <div className="mt-6 flex flex-col gap-4 md:mt-8 md:flex-row md:items-end md:justify-between md:gap-10">
+          <p className="max-w-xl text-lg md:text-xl">
+            Речі з квартири №5. Ми зробили їх для себе — і залишили трохи для
+            своїх.
           </p>
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <TrackedLink
-              event="cta_click"
-              location="hero"
-              href="/checkout?product=board-001&variant=standard"
-              className="btn btn-lilac"
-            >
-              купити · 799 ₴
-            </TrackedLink>
-            <a href="#product" className="btn btn-outline">
-              дивитись дошку
-            </a>
-          </div>
-          <div className="mt-10 grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <div className="font-display text-3xl">55</div>
-              <div className="caps text-[10px] opacity-70">штук на дроп</div>
-            </div>
-            <div>
-              <div className="font-display text-3xl">5–7 днів</div>
-              <div className="caps text-[10px] opacity-70">виготовлення</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="md:col-span-6">
-          <div className="relative">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute bottom-[-18%] left-[28%] right-0 top-[55%] -z-0 rounded-[50%] bg-ink/35 blur-2xl md:blur-3xl"
-            />
-            <Image
-              src="/hero-board.webp"
-              alt="F5 BOARD — 3D-друкована шахова дошка F5 CHESS CLUB, вид збоку"
-              width={3024}
-              height={1599}
-              priority
-              sizes="(min-width: 1024px) 50vw, (min-width: 768px) 50vw, 100vw"
-              className="relative h-auto w-full"
-            />
-            <div className="caps absolute right-3 top-3 bg-ink px-2 py-1 text-[10px] text-lilac">
-              001/055
-            </div>
-          </div>
+          <p className="font-hand shrink-0 text-3xl">
+            дай п&apos;ять і ще одну каву
+          </p>
         </div>
       </div>
     </section>

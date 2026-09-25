@@ -1,3 +1,5 @@
+import { HOW_TO_FIND } from "@/lib/place";
+
 export function Secret() {
   return (
     <section
@@ -18,60 +20,24 @@ export function Secret() {
         </div>
 
         <ol className="space-y-6 md:col-span-7 md:col-start-6">
-          <Step
-            num="01"
-            title="натискаєш «5»"
-            body="на домофоні біля дверей під'їзду."
-          />
-          <Step
-            num="02"
-            title="заходиш у під'їзд"
-            body="старий львівський, тихий, свій."
-          />
-          <Step
-            num="03"
-            title="і знаходиш нас"
-            body="двері flat5. ти на місці."
-          />
+          {HOW_TO_FIND.map((s) => (
+            <li
+              key={s.num}
+              className="flex gap-6 border-b border-lilac/40 pb-6"
+            >
+              <div className="font-display text-5xl text-lilac md:text-6xl">
+                {s.num}
+              </div>
+              <div>
+                <div className="font-display text-2xl md:text-3xl">
+                  {s.title}
+                </div>
+                <div className="mt-2 text-paper/80">{s.body}</div>
+              </div>
+            </li>
+          ))}
         </ol>
-
-        <div className="md:col-span-12">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <Photo tag="05 · DOMOFON" />
-            <Photo tag="06 · DOOR" />
-          </div>
-        </div>
       </div>
     </section>
-  );
-}
-
-function Step({
-  num,
-  title,
-  body,
-}: {
-  num: string;
-  title: string;
-  body: string;
-}) {
-  return (
-    <li className="flex gap-6 border-b border-lilac/40 pb-6">
-      <div className="font-display text-5xl text-lilac md:text-6xl">{num}</div>
-      <div>
-        <div className="font-display text-2xl md:text-3xl">{title}</div>
-        <div className="mt-2 text-paper/80">{body}</div>
-      </div>
-    </li>
-  );
-}
-
-function Photo({ tag }: { tag: string }) {
-  return (
-    <div className="shadow-brut relative aspect-[4/3] border-2 border-lilac bg-ink">
-      <span className="caps absolute bottom-3 left-3 bg-lilac px-2 py-1 text-[10px] text-ink">
-        {tag} · фото скоро
-      </span>
-    </div>
   );
 }

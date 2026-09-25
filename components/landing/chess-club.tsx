@@ -52,7 +52,7 @@ export function ChessClub() {
   return (
     <section
       id="club"
-      className="border-b-2 border-ink bg-bone"
+      className="border-b-2 border-ink bg-cream"
     >
       <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-6 py-20 md:grid-cols-12">
         <div className="md:col-span-6">

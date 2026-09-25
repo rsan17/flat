@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Marquee } from "@/components/landing/marquee";
+import { PurchaseTracker } from "@/components/analytics/purchase-tracker";
 import { getOrderLocal } from "@/lib/order-store";
 import { dbConfigured, getOrderById } from "@/lib/db";
 import { formatUAH } from "@/lib/utils";
@@ -34,6 +35,12 @@ export default async function OrderSuccessPage({
 
   return (
     <>
+      <PurchaseTracker
+        orderId={order.id}
+        status={order.status}
+        totalKopecks={order.total_amount}
+        deliveryType={order.np_delivery_type}
+      />
       <header className="sticky top-0 z-30 border-b-2 border-ink bg-paper/95 backdrop-blur">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-3">
           <Link href="/" className="font-display text-2xl">

@@ -5,13 +5,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * ⚠️ style: "currency" тут використовувати НЕ можна: Node ICU віддає «799 ₴»,
+ * а Chrome — «799 грн». Через це React лаявся на hydration mismatch і ціна
+ * стрибала після гідратації. Форматуємо число, символ дописуємо самі.
+ */
 export function formatUAH(kopecks: number) {
-  const grn = kopecks / 100;
-  return new Intl.NumberFormat("uk-UA", {
-    style: "currency",
-    currency: "UAH",
-    maximumFractionDigits: 0,
-  }).format(grn);
+  const grn = Math.round(kopecks / 100);
+  // Перед ₴ стоїть нерозривний пробіл: ціна не має ламатись на два рядки.
+  return `${new Intl.NumberFormat("uk-UA").format(grn)} ₴`;
 }
 
 export function generateOrderNumber() {
