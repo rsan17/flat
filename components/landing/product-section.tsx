@@ -28,7 +28,7 @@ export function ProductSection({
   return (
     <section
       id={product.sku}
-      className={`border-b-2 border-ink ${
+      className={`scroll-mt-16 border-b-2 border-ink ${
         background === "cream" ? "bg-cream" : "bg-paper"
       }`}
     >

@@ -7,13 +7,13 @@ import { ProductShot } from "@/components/shop/product-shot";
 import { ProductGrid } from "@/components/shop/product-grid";
 import { BuyBox } from "@/components/shop/buy-box";
 import { ShopFaq } from "@/components/shop/shop-faq";
-import { getProduct, PRODUCT_LIST } from "@/lib/products";
+import { getProduct, PRODUCT_LIST, type ProductSpec } from "@/lib/products";
 import { PLACE } from "@/lib/place";
 
 type Params = Promise<{ slug: string }>;
 
 /** Умови отримання однакові для всіх товарів — дописуємо до характеристик. */
-const FULFILMENT_SPECS = [
+const FULFILMENT_SPECS: ProductSpec[] = [
   { label: "самовивіз", value: PLACE.address },
   { label: "доставка", value: "Нова Пошта — відділення або поштомат" },
   { label: "оплата", value: "monobank: картка, Apple Pay, Google Pay" },
@@ -126,7 +126,20 @@ export default async function ProductPage({ params }: { params: Params }) {
                     <dt className="caps shrink-0 text-[11px] opacity-70">
                       {s.label}
                     </dt>
-                    <dd className="text-right text-sm">{s.value}</dd>
+                    <dd className="text-right text-sm">
+                      {s.href ? (
+                        <a
+                          href={s.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline underline-offset-2 hover:bg-lilac"
+                        >
+                          {s.value}
+                        </a>
+                      ) : (
+                        s.value
+                      )}
+                    </dd>
                   </div>
                 ))}
               </dl>
@@ -142,7 +155,7 @@ export default async function ProductPage({ params }: { params: Params }) {
                 <h2 className="font-display text-4xl md:text-5xl">
                   ЩЕ В НАС Є
                 </h2>
-                <Link href="/#board-001" className="caps text-xs hover:underline">
+                <Link href="/#shop" className="caps text-xs hover:underline">
                   усі товари →
                 </Link>
               </div>

@@ -28,6 +28,8 @@ export type ProductMedia = {
 export type ProductSpec = {
   label: string;
   value: string;
+  /** Зовнішнє посилання на значення, напр. сайт виробника */
+  href?: string;
 };
 
 export type EngravingOption = {
@@ -180,17 +182,18 @@ export const TEE_001: Product = {
     },
   ],
   variantLabel: "розмір",
-  // ⚠️ Ціна — заглушка. Розміри теж треба підтвердити.
+  // Ціна підтверджена (1200 ₴). ⚠️ Розміри ще треба підтвердити.
   variants: [
-    { sku: "s", name: "S", description: "Оверсайз-крій.", priceKopecks: 99900 },
-    { sku: "m", name: "M", description: "Оверсайз-крій.", priceKopecks: 99900 },
-    { sku: "l", name: "L", description: "Оверсайз-крій.", priceKopecks: 99900 },
-    { sku: "xl", name: "XL", description: "Оверсайз-крій.", priceKopecks: 99900 },
+    { sku: "s", name: "S", description: "Оверсайз-крій.", priceKopecks: 120000 },
+    { sku: "m", name: "M", description: "Оверсайз-крій.", priceKopecks: 120000 },
+    { sku: "l", name: "L", description: "Оверсайз-крій.", priceKopecks: 120000 },
+    { sku: "xl", name: "XL", description: "Оверсайз-крій.", priceKopecks: 120000 },
   ],
   specs: [
     { label: "крій", value: "оверсайз, унісекс" },
     { label: "колір", value: "чорний" },
     { label: "принт", value: "шахівниця з графіті на спині, логотип спереду" },
+    { label: "виробник", value: "BatCat, Львів", href: "https://batcat.shop/" },
   ],
   badges: ["скоро", "chess club"],
 };
