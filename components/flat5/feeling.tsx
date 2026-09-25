@@ -8,8 +8,8 @@ export function Feeling() {
         <div className="md:col-span-5">
           <div className="shadow-brut relative aspect-[4/5] overflow-hidden border-2 border-ink bg-paper">
             <Image
-              src="/img/main_4.webp"
-              alt="FLAT5 — атмосфера"
+              src="/img/place/inside-club.webp"
+              alt="Всередині FLAT5: дзеркальна куля, вивіска шахового клубу, повний зал"
               fill
               sizes="(min-width: 1024px) 40vw, 100vw"
               className="object-cover"

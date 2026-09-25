@@ -42,8 +42,8 @@ export function PlaceTeaser() {
         <div className="md:col-span-6 md:col-start-7">
           <div className="shadow-brut relative aspect-[4/3] overflow-hidden border-2 border-ink bg-cream">
             <Image
-              src="/img/main_1.jpg"
-              alt="FLAT5 — дворик закладу"
+              src="/img/club/tournament.webp"
+              alt="Сонячний дворик FLAT5 із десятком шахових столів"
               fill
               sizes="(min-width: 768px) 48vw, 100vw"
               className="object-cover"

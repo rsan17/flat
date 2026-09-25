@@ -143,30 +143,56 @@ export const BOARD_001: Product = {
 
 export const TEE_001: Product = {
   sku: "tee-001",
-  title: "FLAT5 TEE",
-  tagline: "Оверсайз-футболка кольору lilac ash. Гірлянда на спині.",
+  title: "F5 CHESS CLUB TEE",
+  tagline: "Чорний оверсайз. Шахівниця з графіті на всю спину.",
   category: "apparel",
   status: "soon",
   cardDescription:
-    "Оверсайз-футболка в кольорі закладу. Спереду — «flat 5 team», на спині — логотип із гірляндою.",
+    "Чорна оверсайз-футболка клубу: дрібний логотип спереду, шахівниця з тегами на спині.",
   description: [
-    "Та сама гірлянда, що висить у дворику, переїхала на спину футболки. Спереду — рукописне «flat 5 team» дрібним шрифтом: помітять тільки свої.",
-    "Оверсайз-крій, щільний бавовняний джерсі, колір lilac ash — фірмовий лілак FLAT5.",
+    "Футболка, в якій грають у нашому дворику. Спереду — дрібне «F5 CHESS CLUB» на грудях, помітять тільки свої.",
+    "На спині — шахівниця, де замість фігур теги, корона, смайл і підпис клубу. Знизу — «Львів · пл. Ринок 39», щоб знали, де нас шукати.",
   ],
-  media: [],
+  media: [
+    {
+      src: "/img/tee/tee-back.webp",
+      alt: "Спина футболки F5 CHESS CLUB: бузкова шахівниця з графіті-тегами",
+      tag: "back",
+      bg: "cream",
+    },
+    {
+      src: "/img/tee/tee-and-boards.webp",
+      alt: "Логотип F5 CHESS CLUB на грудях і стос бузкових шахових дошок",
+      tag: "front",
+      bg: "cream",
+    },
+    {
+      src: "/img/tee/tee-back-game.webp",
+      alt: "Футболка F5 CHESS CLUB за грою в шахи у дворику",
+      tag: "worn",
+      bg: "cream",
+    },
+    {
+      src: "/img/tee/tee-pieces.webp",
+      alt: "Футболка з дошкою F5 BOARD і розсипаними фігурами",
+      tag: "detail",
+      bg: "cream",
+    },
+  ],
   variantLabel: "розмір",
+  // ⚠️ Ціна — заглушка. Розміри теж треба підтвердити.
   variants: [
-    { sku: "s", name: "FLAT5 TEE — S", description: "Оверсайз-крій.", priceKopecks: 99900 },
-    { sku: "m", name: "FLAT5 TEE — M", description: "Оверсайз-крій.", priceKopecks: 99900 },
-    { sku: "l", name: "FLAT5 TEE — L", description: "Оверсайз-крій.", priceKopecks: 99900 },
-    { sku: "xl", name: "FLAT5 TEE — XL", description: "Оверсайз-крій.", priceKopecks: 99900 },
+    { sku: "s", name: "S", description: "Оверсайз-крій.", priceKopecks: 99900 },
+    { sku: "m", name: "M", description: "Оверсайз-крій.", priceKopecks: 99900 },
+    { sku: "l", name: "L", description: "Оверсайз-крій.", priceKopecks: 99900 },
+    { sku: "xl", name: "XL", description: "Оверсайз-крій.", priceKopecks: 99900 },
   ],
   specs: [
     { label: "крій", value: "оверсайз, унісекс" },
-    { label: "колір", value: "lilac ash" },
-    { label: "друк", value: "шовкодрук: гірлянда + логотип" },
+    { label: "колір", value: "чорний" },
+    { label: "принт", value: "шахівниця з графіті на спині, логотип спереду" },
   ],
-  badges: ["скоро", "мерч"],
+  badges: ["скоро", "chess club"],
 };
 
 /** Порядок тут = порядок у каталозі */

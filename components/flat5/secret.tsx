@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { HOW_TO_FIND } from "@/lib/place";
 
 export function Secret() {
@@ -17,6 +18,16 @@ export function Secret() {
           <p className="mt-8 max-w-md text-lg text-paper/90">
             у нас немає вивіски. є лише маленький секрет.
           </p>
+
+          <div className="shadow-brut relative mt-10 aspect-[3/4] overflow-hidden border-2 border-lilac">
+            <Image
+              src="/img/place/entrance.webp"
+              alt="Вхід у FLAT5: скляні двері з літерами FLAT і гірлянда з прапорців над столиками"
+              fill
+              sizes="(min-width: 768px) 38vw, 100vw"
+              className="object-cover"
+            />
+          </div>
         </div>
 
         <ol className="space-y-6 md:col-span-7 md:col-start-6">

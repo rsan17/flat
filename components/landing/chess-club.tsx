@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -87,6 +88,16 @@ export function ChessClub() {
             <ClubPerk
               tag="кодекс"
               text="Ми граємо запекло, але з повагою. Тут немає токсичності — тільки дружнє ставлення один до одного. І Flat5 — наш простір, тому бережемо його."
+            />
+          </div>
+
+          <div className="shadow-brut relative mt-8 aspect-[4/3] overflow-hidden border-2 border-ink">
+            <Image
+              src="/img/club/tables-top.webp"
+              alt="Вид згори на шахові столи в дворику FLAT5 під час турніру"
+              fill
+              sizes="(min-width: 768px) 48vw, 100vw"
+              className="object-cover"
             />
           </div>
         </div>

@@ -34,8 +34,8 @@ export function Hero() {
         <div className="md:col-span-5">
           <div className="shadow-brut relative aspect-[4/5] overflow-hidden border-2 border-ink bg-lilac">
             <Image
-              src="/img/main_1.jpg"
-              alt="FLAT5 — інтер'єр"
+              src="/img/place/yard-golden.webp"
+              alt="Дворик FLAT5 на заході сонця: столики, гірлянда з прапорців, вивіска FLAT"
               fill
               priority
               sizes="(min-width: 1024px) 40vw, 100vw"
