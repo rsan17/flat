@@ -49,8 +49,8 @@ export default function Flat5Page() {
                   <span className="hl-paper">ДОДОМУ</span>.
                 </h2>
                 <p className="mt-6 max-w-xl text-lg">
-                  Шахова дошка з нашого клубу, футболка кольору цих стін і
-                  стікери з лодонькою. Усе, що можна винести за двері.
+                  Шахова дошка з нашого клубу і футболка, в якій тут грають.
+                  Усе, що можна винести за двері.
                 </p>
               </div>
               <Link href="/#board-001" className="btn btn-paper">
